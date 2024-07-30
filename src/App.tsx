@@ -8,7 +8,7 @@ function App() {
         signOutRedirectURL: "http://localhost:5174",
         clientID: import.meta.env.VITE_PATIENT_ASGARDEO_CLIENT_ID,
         baseUrl: import.meta.env.VITE_PATIENT_ASGARDEO_BASE_URL,
-        scope: ["openid", "email", "profile", "insert_appointment", "retrieve_own_patient_data"]
+        scope: ["openid", "email", "profile", "update_own_doctor_sessions"]
     };
     return (
         <>
