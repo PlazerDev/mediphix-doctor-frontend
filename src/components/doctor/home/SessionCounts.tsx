@@ -1,9 +1,9 @@
-import React from 'react'
-
 const SessionCounts = () => {
   return (
-    <div>SessionCounts</div>
-  )
-}
+    <>
+      <div><p></p></div>
+    </>
+  );
+};
 
-export default SessionCounts
+export default SessionCounts;
