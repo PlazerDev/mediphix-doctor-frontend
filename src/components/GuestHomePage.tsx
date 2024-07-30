@@ -1,5 +1,4 @@
 import { useAuthContext } from "@asgardeo/auth-react";
-import CustomButton from "./doctor/CustomButton.tsx";
 import LogoImg from "../../src/assets/images/mediphix.jpg";
 import LandingImg from "../assets/images/signup/LandingImg.jpg";
 
@@ -8,16 +7,6 @@ function GuestHomePage() {
 
   return (
     <>
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CustomButton onClick={() => signIn()} label={"Log In"} />
-      </div>
       <div>
         <div className=" flex justify-center items-center h-screen ">
           <div className="bg-[var(--card-background)] w-[50%] h-auto rounded-[25px] p-8 pt-0 flex flex-col items-center">
