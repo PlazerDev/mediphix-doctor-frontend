@@ -11,6 +11,9 @@ import { FaRegAddressBook } from "react-icons/fa";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import AllMedicalCenters from "../components/doctor/medicalCenters/AllMedicalCenters";
 import NotRegisteredCenter from "../components/doctor/medicalCenters/NotRegisteredCenter";
+import RegisteredCenter from "../components/doctor/medicalCenters/RegisteredCenter";
+import AppointmentDetailsForEachCatagory from "../components/doctor/medicalCenters/AppointmentDetailsForEachCatagory";
+import MyMedicalCenters from "../components/doctor/medicalCenters/MyMedicalCenters";
 function DoctorRoutes() {
   return (
     <div>
@@ -33,7 +36,18 @@ function DoctorRoutes() {
           path="/medicalcenters/allmedicalcenters/:centerName"
           element={<NotRegisteredCenter />}
         />
-
+        <Route
+          path="/medicalcenters/mymedicalcenters"
+          element={<MyMedicalCenters />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/:centerName"
+          element={<RegisteredCenter />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/:centerName/:category"
+          element={<AppointmentDetailsForEachCatagory />}
+        />
         <Route
           path="/sessions"
           element={

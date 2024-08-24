@@ -14,7 +14,7 @@ const CenterSearchPannel = () => {
       <div className="flex m-4 ">
         <input
           type="text"
-          placeholder="Enter Doctor Name Here"
+          placeholder="Enter Medical Center Name Here"
           className="focus:outline-none placeholder:text-[var(--text-c)] w-[80%] rounded-l-lg pl-8"
         />
         <button className="bg-[#FF7300] text-white rounded-r-lg ml-[0.1%] w-96 pl-[1%] p-4">
@@ -23,7 +23,6 @@ const CenterSearchPannel = () => {
       </div>
 
       <div className="flex gap-4 ml-[1%] mt-[1%] mb-[1%] mr-[1%]">
-    
         <Select
           showSearch
           placeholder="Appointment Category"

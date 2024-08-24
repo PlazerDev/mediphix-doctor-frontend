@@ -8,14 +8,13 @@ interface Center {
     name: string;
     address: string;
     appointmentCategory: string[];
-    noOfDoctors: number;
     description: string;
     phoneNo: string;
   }
 
 const NotRegisteredCenter = () => {
   const location = useLocation();
-  const { name, address, appointmentCategory, noOfDoctors, description, phoneNo } = location.state as Center;
+  const { name, address, appointmentCategory, description, phoneNo } = location.state as Center;
 
   return (
     <>
@@ -29,10 +28,10 @@ const NotRegisteredCenter = () => {
           className="ml-4"
           items={[
             {
-              title: "Appointments",
+              title: "Medical Centers",
             },
             {
-              title: <a href="">Create an appointment</a>,
+              title: <a href="">All Medical Centers</a>,
             },
             {
               title: <a href="">{name}</a>,
@@ -41,8 +40,8 @@ const NotRegisteredCenter = () => {
         />
       </div>
       <DescriptiveCenterDetails name={name} address={address} description={description} phoneNo={phoneNo} />
-      <AvailableCatagorySection appointmentCategory={appointmentCategory}/>
-      <NotJoined />
+      <AvailableCatagorySection centerName={name} appointmentCategory={appointmentCategory}/>
+      <NotJoined name={name}/>
     </>
   )
 }

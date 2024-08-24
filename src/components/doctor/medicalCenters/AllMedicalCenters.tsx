@@ -1,7 +1,7 @@
 import { useState } from "react";
-import CenterDetailCard from "./CenterDetailCard";
 import CenterSearchPannel from "./CenterSearchPannel";
 import { Breadcrumb } from "antd";
+import AllCenterDetailCard from "./AllCenterDetailCard";
 
 interface Center {
   name: string;
@@ -79,7 +79,7 @@ const AllMedicalCenters = () => {
       <div>
         {centerList.map((list, index) => (
           <div key={index} >
-            <CenterDetailCard {...list} />
+            <AllCenterDetailCard {...list} />
           </div>
         ))}
       </div>
