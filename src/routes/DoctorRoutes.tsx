@@ -4,14 +4,16 @@ import {
   HomeOutlined,
   AppstoreOutlined,
   HeartOutlined,
-  AppstoreAddOutlined,
-  FullscreenExitOutlined,
-  FullscreenOutlined,
 } from "@ant-design/icons";
 import DoctorHome from "../components/doctor/home/DoctorHome";
 import AppointmentSection from "../components/doctor/session/AppoinmentSection";
 import { FaRegAddressBook } from "react-icons/fa";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import AllMedicalCenters from "../components/doctor/medicalCenters/AllMedicalCenters";
+import NotRegisteredCenter from "../components/doctor/medicalCenters/NotRegisteredCenter";
+import RegisteredCenter from "../components/doctor/medicalCenters/RegisteredCenter";
+import AppointmentDetailsForEachCatagory from "../components/doctor/medicalCenters/AppointmentDetailsForEachCatagory";
+import MyMedicalCenters from "../components/doctor/medicalCenters/MyMedicalCenters";
 function DoctorRoutes() {
   return (
     <div>
@@ -26,25 +28,50 @@ function DoctorRoutes() {
       />
       <Routes>
         <Route path="/home" element={<DoctorHome />} />
-        
-        <Route path="/sessions" element={<AppointmentSection 
-        name={" Dr. V.ALWIS "} 
-        title={"Manage your sessions here"} 
-        buttontitles={[
-          "UpcomingClinic Sessions",
-          "Create New Clinic Session",
-          "Previous Clinic Sessions",
-        ]} 
-        buttonimages={[
-          FaRegAddressBook,
-          MdOutlineCreateNewFolder,
-          FaRegAddressBook,
-        ]}
-        navigations={[
-          "/doctor/session/",
-          "/doctor/session/",
-          "/doctor/session/",
-        ]} />} />
+        <Route
+          path="/medicalcenters/allmedicalcenters"
+          element={<AllMedicalCenters />}
+        />
+        <Route
+          path="/medicalcenters/allmedicalcenters/:centerName"
+          element={<NotRegisteredCenter />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters"
+          element={<MyMedicalCenters />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/:centerName"
+          element={<RegisteredCenter />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/:centerName/:category"
+          element={<AppointmentDetailsForEachCatagory />}
+        />
+        <Route
+          path="/sessions"
+          element={
+            <AppointmentSection
+              name={" Dr. V.ALWIS "}
+              title={"Manage your sessions here"}
+              buttontitles={[
+                "UpcomingClinic Sessions",
+                "Create New Clinic Session",
+                "Previous Clinic Sessions",
+              ]}
+              buttonimages={[
+                FaRegAddressBook,
+                MdOutlineCreateNewFolder,
+                FaRegAddressBook,
+              ]}
+              navigations={[
+                "/doctor/session/",
+                "/doctor/session/",
+                "/doctor/session/",
+              ]}
+            />
+          }
+        />
       </Routes>
     </div>
   );
