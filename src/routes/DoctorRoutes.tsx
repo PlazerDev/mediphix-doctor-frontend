@@ -12,6 +12,7 @@ import DoctorHome from "../components/doctor/home/DoctorHome";
 import AppointmentSection from "../components/doctor/session/AppoinmentSection";
 import { FaRegAddressBook } from "react-icons/fa";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import AllMedicalCenters from "../components/doctor/medicalCenters/AllMedicalCenters";
 function DoctorRoutes() {
   return (
     <div>
@@ -26,7 +27,7 @@ function DoctorRoutes() {
       />
       <Routes>
         <Route path="/home" element={<DoctorHome />} />
-        
+        <Route path="/allmedicalcenters" element={<AllMedicalCenters />} />
         <Route path="/sessions" element={<AppointmentSection 
         name={" Dr. V.ALWIS "} 
         title={"Manage your sessions here"} 
