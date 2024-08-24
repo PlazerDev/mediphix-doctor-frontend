@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import centerlogo from "../../../assets/images/medical-center/NawalokaHospitals.jpeg";
 
 interface Center {
@@ -31,7 +32,6 @@ const CenterDetailCard = ({
 
     const remainingCount = items.length - itemCount;
     if (remainingCount > 0) {
-      // Use Tailwind classes for the circle effect
       displayString += `, <span class="inline-flex items-center justify-center bg-[#868686] text-[#DCDCDC]  rounded-full w-6 h-6 text-sm font-bold ml-1">${remainingCount} </span> more`;
     }
 
@@ -46,43 +46,59 @@ const CenterDetailCard = ({
 
   return (
     <>
-      <div className="bg-white rounded-2xl p-4 mx-1 mb-4">
-        <div className="flex">
-          <div className="flex items-center ml-8 mr-16 w-44">
-            <img
-              className="w-36 h-36 rounded-2xl object-contain"
-              src={centerlogo}
-              alt="Center Logo"
-            />
-          </div>
-          <div className="w-full">
-            <div className="flex gap-4 mb-2">
-              <div className="w-1/2">
-                <p className="text-gray-500 text-sm">Name</p>
-                <p>{name}</p>
-              </div>
-              <div className="flex flex-col ml-10">
-                <p className="text-gray-500 text-sm">Location</p>
-                <p>{address}</p>
-              </div>
+      <Link
+        to={{
+          pathname: "/doctor/medicalcenters/allmedicalcenters/" + name,
+        }}
+        state={{
+          name,
+          address,
+          appointmentCategory,
+          noOfDoctors,
+          description,
+          phoneNo,
+        }}
+      >
+        <div className="bg-white rounded-2xl p-4 mx-1 mb-4">
+          <div className="flex">
+            <div className="flex items-center ml-8 mr-16 w-44">
+              <img
+                className="w-36 h-36 rounded-2xl object-contain"
+                src={centerlogo}
+                alt="Center Logo"
+              />
             </div>
+            <div className="w-full">
+              <div className="flex gap-4 mb-2">
+                <div className="w-1/2">
+                  <p className="text-gray-500 text-sm">Name</p>
+                  <p>{name}</p>
+                </div>
+                <div className="flex flex-col ml-10">
+                  <p className="text-gray-500 text-sm">Location</p>
+                  <p>{address}</p>
+                </div>
+              </div>
 
-            <div className="flex gap-4 mb-2">
-              <div>
-                <p className="text-gray-500 text-sm">
-                  Supported Appointment Categories
-                </p>
-                <p dangerouslySetInnerHTML={{ __html: displayedCategories }} />
+              <div className="flex gap-4 mb-2">
+                <div>
+                  <p className="text-gray-500 text-sm">
+                    Supported Appointment Categories
+                  </p>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: displayedCategories }}
+                  />
+                </div>
+                <div className="flex flex-col ml-10"></div>
               </div>
-              <div className="flex flex-col ml-10"></div>
-            </div>
-            <div>
-              <p className="text-gray-500 text-sm">Number of Doctors</p>
-              <p>{noOfDoctors}</p>
+              <div>
+                <p className="text-gray-500 text-sm">Number of Doctors</p>
+                <p>{noOfDoctors}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 };

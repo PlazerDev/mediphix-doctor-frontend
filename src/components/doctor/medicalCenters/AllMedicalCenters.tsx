@@ -56,12 +56,11 @@ const AllMedicalCenters = () => {
       phoneNo: "011-4564564",
     },
   ]);
+
   return (
     <>
       <div>
-        <p className="text-xl font-bold ml-[1%] mt-[1%]">
-          All Medical Centers
-        </p>
+        <p className="text-xl font-bold ml-[1%] mt-[1%]">All Medical Centers</p>
       </div>
       <div>
         <Breadcrumb
@@ -79,11 +78,7 @@ const AllMedicalCenters = () => {
       <CenterSearchPannel />
       <div>
         {centerList.map((list, index) => (
-          <div
-            key={index}
-            className="cursor-pointer"
-            // onClick={() => handleItemClick(list)}
-          >
+          <div key={index} >
             <CenterDetailCard {...list} />
           </div>
         ))}
