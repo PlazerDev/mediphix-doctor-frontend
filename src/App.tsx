@@ -1,7 +1,10 @@
-import { AuthProvider } from "@asgardeo/auth-react";
+import {AuthProvider} from "@asgardeo/auth-react";
 import Home from "./components/Home.tsx";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import DoctorRoutes from "./routes/DoctorRoutes.tsx";
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 function App() {
 
@@ -15,13 +18,15 @@ function App() {
     return (
         <>
             <AuthProvider config={asgardioConfig}>
-                <Router>
-                    <Routes>
-                        <Route path="/" element={<Home/>}/>
-                      {/* doctor Rotes  */}
-            <Route path="/doctor/*" element={<DoctorRoutes />} />
-                    </Routes>
-                </Router>
+                <QueryClientProvider client={queryClient}>
+                    <Router>
+                        <Routes>
+                            <Route path="/" element={<Home/>}/>
+                            {/* doctor Rotes  */}
+                            <Route path="/doctor/*" element={<DoctorRoutes/>}/>
+                        </Routes>
+                    </Router>
+                </QueryClientProvider>
             </AuthProvider>
         </>
     )
