@@ -14,6 +14,10 @@ import NotRegisteredCenter from "../components/doctor/medicalCenters/NotRegister
 import RegisteredCenter from "../components/doctor/medicalCenters/RegisteredCenter";
 import AppointmentDetailsForEachCatagory from "../components/doctor/medicalCenters/AppointmentDetailsForEachCatagory";
 import MyMedicalCenters from "../components/doctor/medicalCenters/MyMedicalCenters";
+import MedicalCenterSection from "../components/doctor/medicalCenters/MedicalCenterSection";
+import { TbHeartHandshake } from "react-icons/tb";
+import { TbHeart } from "react-icons/tb";
+
 function DoctorRoutes() {
   return (
     <div>
@@ -28,6 +32,24 @@ function DoctorRoutes() {
       />
       <Routes>
         <Route path="/home" element={<DoctorHome />} />
+        <Route
+          path="/medicalcenters"
+          element={
+            <MedicalCenterSection
+              name={" Dr. V.ALWIS "}
+              title={"Manage medical centers here"}
+              buttontitles={["My Medical Centers", "All Medical Centers"]}
+              buttonimages={[
+                TbHeartHandshake,
+                TbHeart,
+              ]}
+              navigations={[
+                "/doctor/medicalcenters/mymedicalcenters",
+                "/doctor/medicalcenters/allmedicalcenters",
+              ]}
+            />
+          }
+        />
         <Route
           path="/medicalcenters/allmedicalcenters"
           element={<AllMedicalCenters />}
