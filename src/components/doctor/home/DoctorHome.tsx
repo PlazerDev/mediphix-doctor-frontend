@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Footer from "./../../Footer";
 import DoctorTimeSlots from "./DoctorTimeSlots";
 //import NoOngoingSession from "./NoOngoingSession";
@@ -7,13 +9,153 @@ import type { CalendarProps } from "antd";
 import type { Dayjs } from "dayjs";
 import "./SessionCounts.css";
 import bgimage from "../../../assets/images/home/sessionCount.png";
+import axios, {AxiosRequestConfig} from "axios";
+import Loading from "../../Loading.tsx";
+import Swal from 'sweetalert2';
+import { useQuery } from "@tanstack/react-query";
 
 const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>["mode"]) => {
   console.log(value.format("YYYY-MM-DD"), mode);
 };
+interface Patient {
+  mobile_number: string;
+  first_name: string;
+  last_name: string;
+  nic: string;
+  birthday: string;
+  email: string;
+  address: string;
+  nationality: string;
+}
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+interface TokenData {
+  access_token: string;
+}
+
+
+
 
 const DoctorHome = () => {
   const { token } = theme.useToken();
+
+  let access_token: string = "";
+
+    function getToken(): string {
+        const sessionDataString: string | null = sessionStorage.getItem('session_data-instance_0-ws3zT_tcti_dAXam7cpJ9eL9rvwa');
+
+        if (!sessionDataString) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'No session token found. Please login!',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            })
+            return "";
+        }
+
+        try {
+            const sessionData: TokenData = JSON.parse(sessionDataString);
+            access_token = sessionData.access_token;
+            if (access_token == "") {
+                throw new Error("Access token not found in session data");
+            }
+            return access_token;
+        } catch (parseError) {
+            Swal.fire({
+                title: 'Error!',
+                text: "Invalid session data please login again.",
+                icon: "error",
+                confirmButtonText: 'OK'
+            })
+            return "";
+        }
+    }
+
+    access_token = getToken();
+
+    console.log("Access token: " + access_token);
+
+    // if (access_token == "") {
+    //
+    // }
+
+    const config: AxiosRequestConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access_token}`
+        }
+    };
+
+    console.log("before queryConfig: ", config);
+
+    const {
+        data: doctorDetails,
+        isError,
+        isPending,
+        error
+    } = useQuery({
+        queryKey: ["patient", {backendURL}, {config}],
+        staleTime: 20000,
+        queryFn: async () => {
+          console.log("Fetching patient data...");
+            const response = await axios.get<Patient>(`${backendURL}/patient/patientdata`, config);
+            console.log(response);
+
+            if (response.status === 200) {
+                // Swal.fire({
+                //     title: 'Success!',
+                //     text: 'Welcome to Patient Dashboard! Patient Data fetched successfully.',
+                //     icon: 'success',
+                //     confirmButtonText: 'OK',
+                // });
+                return (await response.data) as Patient;
+            } else if (response.status === 401) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Unauthorized, please login again (401).',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return;
+            } else if (response.status === 403) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'You do not have access to patient dashboard, please login via correct portal (403).',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return;
+            } else if (response.status === 404) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Patient not found (404).',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return;
+            } else if (response.status === 500) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Internal server error (500). Please try again later.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return;
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: `Unexpected error occurred (status code: ${response.status}).`,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+                return;
+            }
+        },
+    });
+
+    console.log("after queryConfig: ", config);
+
 
   const wrapperStyle: React.CSSProperties = {
     width: "100%",
@@ -24,7 +166,7 @@ const DoctorHome = () => {
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
-          Good Evening , Dr. V. Sandaruwan
+          Good Evening , Dr. V. {doctorDetails?.first_name}
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
       </div>
