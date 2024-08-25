@@ -2,18 +2,14 @@ import { useEffect } from 'react';
 import { useAuthContext } from "@asgardeo/auth-react";
 import GuestHomePage from "./GuestHomePage.tsx";
 import { useNavigate } from 'react-router-dom';
+import DoctorHome from './doctor/home/DoctorHome.tsx';
 
 function Home() {
   const { state } = useAuthContext();
-  const navigate = useNavigate();
+  console.log("Home comp");
 
-  useEffect(() => {
-    if (state.isAuthenticated) {
-      navigate("/doctor/home");
-    }
-  }, [state.isAuthenticated, navigate]);
 
-  return !state.isAuthenticated ? <GuestHomePage /> : null;
+  return !state.isAuthenticated ? <GuestHomePage /> : <DoctorHome />;
 }
 
 export default Home;
