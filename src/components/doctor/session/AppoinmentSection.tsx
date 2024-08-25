@@ -82,14 +82,6 @@ function AppointmentSection({
     },
   ];
 
-  const handleNavigation = (index: number) => {
-    const navigationData = {
-      title: buttontitles[index],
-      appointments: index === 0 ? upcomingAppointments : previousAppointments,
-    };
-    navigate(navigations[index], { state: navigationData });
-  };
-
   return (
     <div className={`h-screen flex flex-col ${loaded ? "fade-in" : ""}`}>
       {/* <PatientNavigation/> */}
@@ -122,7 +114,7 @@ function AppointmentSection({
                     backgroundColor:
                       index % 2 === 0 ? "var(--text-b)" : "var(--accent)",
                   }}
-                  onClick={() => handleNavigation(index)}
+                  onClick={() => navigate(navigations[index])}
                 >
                   <div className="flex items-center justify-center flex-col w-24">
                     <IconComponent style={{ fontSize: "2rem" }} />

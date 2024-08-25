@@ -13,7 +13,6 @@ diagnosisCategory: string;
 labReportStatus: string;
 }
 
-
 const columns: TableProps<DataType>["columns"] = [
   {
     title: "Date",

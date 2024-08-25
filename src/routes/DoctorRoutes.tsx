@@ -17,6 +17,7 @@ import MyMedicalCenters from "../components/doctor/medicalCenters/MyMedicalCente
 import MedicalCenterSection from "../components/doctor/medicalCenters/MedicalCenterSection";
 import { TbHeartHandshake } from "react-icons/tb";
 import { TbHeart } from "react-icons/tb";
+import PreviousSession from "../components/doctor/session/PreviousSession";
 
 function DoctorRoutes() {
   return (
@@ -77,7 +78,7 @@ function DoctorRoutes() {
               name={" Dr. V.ALWIS "}
               title={"Manage your sessions here"}
               buttontitles={[
-                "UpcomingClinic Sessions",
+                "Upcoming Clinic Sessions",
                 "Create New Clinic Session",
                 "Previous Clinic Sessions",
               ]}
@@ -87,12 +88,24 @@ function DoctorRoutes() {
                 FaRegAddressBook,
               ]}
               navigations={[
-                "/doctor/session/",
-                "/doctor/session/",
-                "/doctor/session/",
+                "/doctor/session/upcommingsessions",
+                "/doctor/session/createsessions",
+                "/doctor/session/previoussessions",
               ]}
             />
           }
+        />
+        <Route
+          path="/session/upcommingsessions"
+          element={<MyMedicalCenters />}
+        />
+        <Route
+          path="/session/createsessions"
+          element={<MyMedicalCenters />}
+        />
+        <Route
+          path="/session/previoussessions"
+          element={<PreviousSession />}
         />
       </Routes>
     </div>

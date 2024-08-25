@@ -1,31 +1,113 @@
-import PatientNavigation from '../../patient/navigation/PatientNavigation'
-import { Breadcrumb } from "antd";
-const { RangePicker } = DatePicker;
-import { DatePicker, Space } from "antd";
-import { TimePicker } from "antd";
-import { Select } from "antd";
-import PreviousSessionTableDetails from './PreviousSessionTableDetails';
+import { Breadcrumb, TableProps } from "antd";
+import CenterSearchBar from "./CenterSearchBar";
+import { FaCheckCircle } from "react-icons/fa";
+import DataTable from "./DataTable";
 
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
+const previousSessions = [
+  {
+    key: "1",
+    date: "2024/05/20",
+    timeSlot: "10:00 AM - 10:30 AM",
+    startTime: "10:00 AM",
+    category: "OPD",
+    medicalCenter: "City Hospital",
+    diagnosisCategory: "Cardiology",
+    labReportStatus: "received",
+  },
+  {
+    key: "2",
+    date: "2024/05/22",
+    timeSlot: "10:00 AM - 10:30 AM",
+    startTime: "10:00 AM",
+    category: "OPD",
+    medicalCenter: "Central Clinic",
+    diagnosisCategory: "Infectious Diseases",
+    labReportStatus: "N/A",
+  },
+  {
+    key: "3",
+    date: "2024/05/22",
+    timeSlot: "10:00 AM - 10:30 AM",
+    startTime: "10:00 AM",
+    category: "OPD",
+    medicalCenter: "Central Clinic",
+    diagnosisCategory: "Infectious Diseases",
+    labReportStatus: "pending",
+  },
+];
+
+const columns: TableProps["columns"] = [
+  {
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+  },
+  {
+    title: "Time Slot",
+    dataIndex: "timeSlot",
+    key: "timeSlot",
+  },
+  {
+    title: "Start Time",
+    dataIndex: "startTime",
+    key: "startTime",
+  },
+  {
+    title: "Apt. Category",
+    dataIndex: "category",
+    key: "category",
+  },
+  {
+    title: "Medical Center",
+    dataIndex: "medicalCenter",
+    key: "mcenter",
+  },
+  {
+    title: "Diagnosis Category",
+    dataIndex: "diagnosisCategory",
+    key: "diagnosisCategory",
+  },
+  {
+    title: "Lab Report Status",
+    dataIndex: "labReportStatus",
+    key: "lbstatus",
+    render: (status: string) => {
+      let color = "";
+      let icon = null;
+      if (status === "N/A") {
+        color = "#868686";
+      } else if (status === "received") {
+        color = "#363636";
+        icon = <FaCheckCircle style={{ color }} />;
+      } else if (status === "pending") {
+        color = "#FF7300";
+      }
+      return (
+        <span style={{ color, display: "flex", alignItems: "center" }}>
+          {icon}
+          <span style={{ marginLeft: icon ? 4 : 0 }}>
+            {toPascalCase(status)}
+          </span>
+        </span>
+      );
+    },
+  },
+];
+
+const toPascalCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .replace(
+      /(\w)(\w*)/g,
+      (_, firstChar, rest) => firstChar.toUpperCase() + rest.toLowerCase()
+    );
 };
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
-
-
 const PreviousSession = () => {
   return (
     <div>
-        <div>
-            <PatientNavigation />
-        </div>
-        <div>
-        <p className="text-xl font-bold ml-[1%] mt-[1%]">
-         Previous Sessions
-        </p>
-        </div>
+      <div>
+        <p className="text-xl font-bold ml-[1%] mt-[1%]">Previous Sessions</p>
+      </div>
       <div>
         <Breadcrumb
           className="ml-[1%]"
@@ -39,79 +121,10 @@ const PreviousSession = () => {
           ]}
         />
       </div>
-      <div className='ml-3'>
-  <input
-    type="text"
-    placeholder="Enter medical center name here"
-    className="focus:outline-none placeholder:text-[var(--text-c)] w-[89%] rounded-l-xl h-[40px] pl-2 mt-2"
-  />
-  <button className="bg-[#FF7300] text-white rounded-r-xl w-[10%] h-[40px] mt-2">
-    Search
-  </button>
-</div>
+      <CenterSearchBar />
+      <DataTable dataSource={previousSessions} columns={columns} />
+    </div>
+  );
+};
 
-<div className="flex ml-[1%] mt-[1%] mb-[1%] mr-[1%]]">
-        <Space direction="vertical" size={15}>
-          <RangePicker style={{ height: "50px" }} />
-        </Space>
-
-        <TimePicker.RangePicker
-          style={{ marginLeft: "20px", width: "300px" }}
-        />
-
-        <div style={{ marginLeft: "20px" }}></div>
-
-        <Select
-          showSearch
-          placeholder="Appointment Category"
-          optionFilterProp="label"
-          onChange={onChange}
-          onSearch={onSearch}
-          style={{ height: "50px", width: "300px" }}
-          options={[]}
-        />
-        <div style={{ marginLeft: "20px" }}></div>
-        <Select
-          showSearch
-          placeholder="Diagnosis Category"
-          optionFilterProp="label"
-          onChange={onChange}
-          onSearch={onSearch}
-          style={{ height: "50px", width: "300px" }}
-          options={[]}
-        />
-      </div>
-      <div style={{ marginLeft: '16px', marginRight:'16px' }}>
-      <PreviousSessionTableDetails data={[]} onRowClick={() => {}} />
-      </div>
-
-
-  
-  <div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-  </div>
-
-  )
-}
-
-export default PreviousSession
+export default PreviousSession;
