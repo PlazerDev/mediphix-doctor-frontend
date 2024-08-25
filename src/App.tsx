@@ -1,6 +1,6 @@
-import { AuthProvider } from "@asgardeo/auth-react";
+import {AuthProvider} from "@asgardeo/auth-react";
 import Home from "./components/Home.tsx";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import DoctorRoutes from "./routes/DoctorRoutes.tsx";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
@@ -23,7 +23,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home/>}/>
                             {/* doctor Rotes  */}
-                            <Route path="/doctor/*" element={<DoctorRoutes />} />
+                            <Route path="/doctor/*" element={<DoctorRoutes/>}/>
                         </Routes>
                     </Router>
                 </QueryClientProvider>
