@@ -1,10 +1,10 @@
 import { Breadcrumb, TableProps } from "antd";
-import CenterSearchBar from "./CenterSearchBar";
 import { FaCheckCircle } from "react-icons/fa";
-import DataTable from "./DataTable";
 import { useNavigate } from "react-router-dom";
+import CenterSearchBar from "./CenterSearchBar";
+import DataTable from "./DataTable";
 
-const previousSessions = [
+const recordbookList = [
   {
     key: "1",
     refNumber: "REF_1598",
@@ -107,17 +107,19 @@ const toPascalCase = (str: string) => {
     );
 };
 
-const PreviousSession = () => {
+const RecordBookList = () => {
   const navigate = useNavigate();
 
   const rowClick = (record: any) => {
-    navigate("/doctor/sessions/previoussessions/" + record.refNumber);
+    navigate("/doctor/sessions/recordbook/" + record.refNumber);
   };
 
   return (
-    <div>
+    <>
       <div>
-        <p className="text-xl font-bold ml-[1%] mt-[1%]">Previous Sessions</p>
+        <p className="text-xl font-bold ml-[1%] mt-[1%]">
+          Record Book - Vishwa Sandaruwan
+        </p>
       </div>
       <div>
         <Breadcrumb
@@ -127,19 +129,22 @@ const PreviousSession = () => {
               title: "Sessions",
             },
             {
-              title: <a href="">Previous Sessions</a>,
+              title: "Previous Sessions",
+            },
+            {
+              title: <a href="">Vishwa's Record Book</a>,
             },
           ]}
         />
       </div>
       <CenterSearchBar />
       <DataTable
-        dataSource={previousSessions}
+        dataSource={recordbookList}
         columns={columns}
         onRowClick={rowClick}
       />
-    </div>
+    </>
   );
 };
 
-export default PreviousSession;
+export default RecordBookList;

@@ -18,6 +18,9 @@ import MedicalCenterSection from "../components/doctor/medicalCenters/MedicalCen
 import { TbHeartHandshake } from "react-icons/tb";
 import { TbHeart } from "react-icons/tb";
 import PreviousSession from "../components/doctor/session/PreviousSession";
+import SessionDetails from "../components/doctor/session/SessionDetails";
+import RecordBook from "../components/doctor/session/RecordBook";
+import RecordBookList from "../components/doctor/session/RecordBookList";
 
 function DoctorRoutes() {
   return (
@@ -40,10 +43,7 @@ function DoctorRoutes() {
               name={" Dr. V.ALWIS "}
               title={"Manage medical centers here"}
               buttontitles={["My Medical Centers", "All Medical Centers"]}
-              buttonimages={[
-                TbHeartHandshake,
-                TbHeart,
-              ]}
+              buttonimages={[TbHeartHandshake, TbHeart]}
               navigations={[
                 "/doctor/medicalcenters/mymedicalcenters",
                 "/doctor/medicalcenters/allmedicalcenters",
@@ -79,7 +79,7 @@ function DoctorRoutes() {
               title={"Manage your sessions here"}
               buttontitles={[
                 "Upcoming Clinic Sessions",
-                "Create New Clinic Session",
+                "Ongoing Session",
                 "Previous Clinic Sessions",
               ]}
               buttonimages={[
@@ -88,24 +88,30 @@ function DoctorRoutes() {
                 FaRegAddressBook,
               ]}
               navigations={[
-                "/doctor/session/upcommingsessions",
-                "/doctor/session/createsessions",
-                "/doctor/session/previoussessions",
+                "/doctor/sessions/upcommingsessions",
+                "/doctor/sessions/ongoingsession",
+                "/doctor/sessions/previoussessions",
               ]}
             />
           }
         />
         <Route
-          path="/session/upcommingsessions"
+          path="/sessions/upcommingsessions"
           element={<MyMedicalCenters />}
         />
+        <Route path="/sessions/ongoingsession" element={<MyMedicalCenters />} />
         <Route
-          path="/session/createsessions"
-          element={<MyMedicalCenters />}
-        />
-        <Route
-          path="/session/previoussessions"
+          path="/sessions/previoussessions"
           element={<PreviousSession />}
+        />
+        <Route
+          path="/sessions/previoussessions/:refNumber"
+          element={<SessionDetails />}
+        />
+        <Route path="/sessions/recordbook" element={<RecordBookList />} />
+        <Route
+          path="/sessions/recordbook/:refNumber"
+          element={<RecordBook />}
         />
       </Routes>
     </div>

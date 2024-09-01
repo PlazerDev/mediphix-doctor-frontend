@@ -2,14 +2,7 @@ import { useState } from "react";
 import { Divider } from "antd";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Breadcrumb } from "antd";
-
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
+import { Link } from "react-router-dom";
 
 const SessionDetails = () => {
   const [data, setData] = useState({
@@ -27,7 +20,7 @@ const SessionDetails = () => {
       patientName: "Vishawa Sadaruwan",
       Age: "25",
       Sex: "Male",
-      Nationality: "Sri Lankan",
+      Nationality: "LK",
     },
 
     labDetails: {
@@ -57,7 +50,8 @@ const SessionDetails = () => {
     <div>
       <div>
         <p className="text-xl font-bold ml-[1%] mt-[1%]">
-          Session - 2024 June 13 at 03.10 PM
+          Session - {data.appointmentDetails.date} at{" "}
+          {data.appointmentDetails.sessionStart}
         </p>
       </div>
       <div>
@@ -71,7 +65,7 @@ const SessionDetails = () => {
               title: <a href="">Previous Sessions</a>,
             },
             {
-              title: <a href=""> REF_1653</a>,
+              title: <a href=""> {data.appointmentDetails.referenceNumber}</a>,
             },
           ]}
         />
@@ -144,10 +138,13 @@ const SessionDetails = () => {
                 <p className="text-sm text-[#868686]">Nationality</p>
                 <p>{data.patientDetails.Nationality}</p>
               </div>
-              <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
-                <MdOutlineRemoveRedEye className="text-lg mr-1" />
-                <p className="text-sm ">Investigate Record Book</p>
-              </div>
+              <Link to="/doctor/sessions/recordbook">
+                <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
+                  <MdOutlineRemoveRedEye className="text-lg mr-1" />
+                  <p className="text-sm ">Investigate Record Book</p>
+                </div>
+              </Link>
+
               <div className="mt-2">
                 <Divider />
                 <h3 className="text-lg mb-3 ">Symptoms</h3>
