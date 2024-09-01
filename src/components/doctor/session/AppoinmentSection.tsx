@@ -1,5 +1,3 @@
-// import statements
-// import PatientNavigation from "../navigation/PatientNavigation";
 import ManageAppoinmentsImg from "../../../assets/images/patient/appoinment/manageAppoinments.png";
 import wdgetBG from "../../../assets/images/patient/appoinment/widgetsBg.png";
 import Footer from "../../Footer";
@@ -32,70 +30,11 @@ function AppointmentSection({
     return () => clearTimeout(timer);
   }, []);
 
-  const upcomingAppointments = [
-    {
-      key: "1",
-      date: "2024/08/18",
-      timeSlot: "10:00 AM - 10:30 AM",
-      refNumber: "REF_2705",
-      doctor: "Dr. Smith",
-      medicalCenter: "City Hospital",
-      category: "General",
-      queueNumber: "5",
-      status: "Active",
-    },
-    {
-      key: "2",
-      date: "2024/08/29",
-      timeSlot: "11:00 AM - 11:30 AM",
-      refNumber: "REF_2346",
-      doctor: "Dr. John",
-      medicalCenter: "Central Clinic",
-      category: "Pediatric",
-      queueNumber: "10",
-      status: "Active",
-    },
-  ];
-
-  const previousAppointments = [
-    {
-      key: "1",
-      date: "2024/05/20",
-      timeSlot: "10:00 AM - 10:30 AM",
-      refNumber: "REF_1921",
-      doctor: "Dr. Adams",
-      medicalCenter: "City Hospital",
-      category: "General",
-      queueNumber: "2",
-      status: "Ended",
-    },
-    {
-      key: "2",
-      date: "2024/05/22",
-      timeSlot: "11:00 AM - 11:30 AM",
-      refNumber: "REF_1322",
-      doctor: "Dr. Brown",
-      medicalCenter: "Central Clinic",
-      category: "Pediatric",
-      queueNumber: "8",
-      status: "Ended",
-    },
-  ];
-
-  const handleNavigation = (index: number) => {
-    const navigationData = {
-      title: buttontitles[index],
-      appointments: index === 0 ? upcomingAppointments : previousAppointments,
-    };
-    navigate(navigations[index], { state: navigationData });
-  };
-
   return (
     <div className={`h-screen flex flex-col ${loaded ? "fade-in" : ""}`}>
-      {/* <PatientNavigation/> */}
       <div className="ml-4 mb-4">
-        <p className="text-[var(--text-a)] font-medium text-xl">Appointments</p>
-        <p className="text-[var(--text-b)] text-xs">Appointments</p>
+        <p className="text-[var(--text-a)] font-medium text-xl">My Sessions</p>
+        <p className="text-[var(--text-b)] text-xs">We hope you're having a great day .</p>
       </div>
 
       <div className="flex items-center justify-center">
@@ -122,7 +61,7 @@ function AppointmentSection({
                     backgroundColor:
                       index % 2 === 0 ? "var(--text-b)" : "var(--accent)",
                   }}
-                  onClick={() => handleNavigation(index)}
+                  onClick={() => navigate(navigations[index])}
                 >
                   <div className="flex items-center justify-center flex-col w-24">
                     <IconComponent style={{ fontSize: "2rem" }} />
