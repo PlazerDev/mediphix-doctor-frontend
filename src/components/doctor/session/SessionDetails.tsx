@@ -139,7 +139,7 @@ const SessionDetails = () => {
                 <p>{data.patientDetails.Nationality}</p>
               </div>
               <Link to="/doctor/sessions/recordbook">
-                <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
+                <div className="flex justify-center bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
                   <MdOutlineRemoveRedEye className="text-lg mr-1" />
                   <p className="text-sm ">Investigate Record Book</p>
                 </div>
