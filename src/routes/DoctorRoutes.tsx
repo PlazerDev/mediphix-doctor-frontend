@@ -31,7 +31,7 @@ function DoctorRoutes() {
         ]}
       />
       <Routes>
-        <Route path="/home" element={<DoctorHome />} />
+        <Route path="/home" element={<DoctorHome/>} />
         <Route
           path="/medicalcenters"
           element={
