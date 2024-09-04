@@ -4,17 +4,18 @@ import { Link } from "react-router-dom";
 import PatentRecordEntryForm from "./PatentRecordEntryForm";
 import patientImage from "../../../../assets/images/session/patientImage.jpeg";
 import { useState } from "react";
+import { CheckCircleFilled } from "@ant-design/icons";
 
 const PatientConsultationDataEntry = () => {
   const [patientData, setPatientData] = useState({
-    name: 'Vishwa Sandaruwan',
+    name: "Vishwa Sandaruwan",
     age: 23,
-    sex: 'Male',
-    nationality: 'LK',
+    sex: "Male",
+    nationality: "LK",
   });
   const [appointmentData, setAppointmentData] = useState({
-    refNumber: 'REF_1528',
-    paymentStatus: 'Done'
+    refNumber: "REF_1525",
+    paymentStatus: "Done",
   });
   return (
     <>
@@ -30,7 +31,12 @@ const PatientConsultationDataEntry = () => {
             </div>
             <div>
               <p className="text-[#868686] text-xs">Payment status</p>
-              <p>{appointmentData.paymentStatus}</p>
+              <p>
+                {appointmentData.paymentStatus === "Done" ? (
+                  <CheckCircleFilled className="mr-2 text-[#07950D]" />
+                ) : null}
+                {appointmentData.paymentStatus}
+              </p>
             </div>
           </div>
 
