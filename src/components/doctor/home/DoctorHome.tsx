@@ -39,7 +39,7 @@ interface Session {
   location: string;
   payment: any;
   sessionDate: string;
-  sessionStatus?: string;
+  sessionStatus: string;
 }
 
 // State initialization using an array of Session
@@ -120,17 +120,17 @@ const DoctorHome = () => {
     staleTime: 20000,
     queryFn: async () => {
       console.log("Fetching patient data...");
-  
+
       try {
         // Fetch data using axios, specifying the response type
         const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetails?mobile=0769418929`, config);
-  
+
         if (response.status === 200) {
           console.log("response.data: ", response.data);
-  
+
           // Set session data in state
           setSessionData(response.data);
-  
+
           // Return data from the function
           return response.data;
         }
@@ -230,8 +230,11 @@ const DoctorHome = () => {
                 <Calendar fullscreen={false} onPanelChange={onPanelChange} />
               </div>
             </div>
-            <DoctorTimeSlots />
-            <DoctorTimeSlots />
+            {sessionData.map((session, index) => (
+              <DoctorTimeSlots key={session.sessionId} data={session} />
+
+            ))}
+
           </div>
         </div>
         <div></div>
@@ -253,21 +256,9 @@ const DoctorHome = () => {
               {isPending ? <Loading footer={false} /> :
                 <OngoingSessionData
                   data={sessionData.filter(session => {
-                    // Convert session date to a JavaScript Date object and normalize it to just the date part
-                    const year = session.timeSlots.startTime["year"];
-                    const month = parseInt(session.timeSlots.startTime["month"], 10) -1;
-                    const day = session.timeSlots.startTime["day"];
-                    const hour = session.timeSlots.startTime["hour"];
-
-                    const sessionDate = new Date(year, month, day, 0, 0, 0, 0).setHours(0, 0, 0, 0);
-                    const today = new Date().setHours(0, 0, 0, 0);
-                    console.log(year, month, day, hour);
-                    console.log("sessionDate: ", sessionDate);
-                    console.log("today: ", today);
-
-                    // Return true if the session date matches today's date
-                    console.log(sessionDate === today);
-                    return sessionDate === today;
+                    if (session.sessionStatus === "ONGOING") {
+                      return true;
+                    }
                   })}
                 />
               }

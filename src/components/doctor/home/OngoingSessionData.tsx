@@ -39,7 +39,7 @@ const OngoingSessionData = (props:OngoingSessionDataProps) => {
         <div>
           <p className="text-[#363636] text-left mt-2">
 
-            {props.data[0].doctorName} | {props.data[0].timeSlots.startTime["hour"]}AM -{props.data[0].timeSlots.endTime["hour"]}AM
+            {props.data[0].doctorName} | {props.data[0].timeSlots.startTime["hour"]}.00 AM -{props.data[0].timeSlots.endTime["hour"]}.00 AM
           </p>
         </div>
         <div className="flex justify-between mt-4">
@@ -54,7 +54,7 @@ const OngoingSessionData = (props:OngoingSessionDataProps) => {
             <p className="text-[#868686] text-sm">Medical Center Mobile Number</p>
             <p className="mb-1">{props.data[0].medicalcenterMobile}</p>
             <p className="text-[#868686] text-sm">Current Appointment Number</p>
-            <p className="mb-1">02 (09.00 AM - 10.00 AM Slot)</p>
+            <p className="mb-1">02 ({props.data[0].timeSlots.startTime["hour"]}.00 AM -{props.data[0].timeSlots.endTime["hour"]}.00 AM Slot)</p>
           </div>
         </div>
         <div className="flex justify-center items-center mt-4 mr-4">
