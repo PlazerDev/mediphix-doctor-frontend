@@ -17,10 +17,39 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Loading from "../../Loading";
 import { SessionData } from "@asgardeo/auth-react";
+import DoctorHomeCalender from "./DoctorHomeCalender";
 
 const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>["mode"]) => {
   console.log(value.format("YYYY-MM-DD"), mode);
-};
+}
+// Function to get the week number of the year
+function getWeekNumber(date: Date): number {
+  // Copying date so the original date won't be modified
+  const tempDate = new Date(date.valueOf());
+
+  // ISO week date weeks start on Monday, so correct the day number
+  const dayNum = (date.getDay() + 6) % 7;
+
+  // Set the target to the nearest Thursday (current date + 4 - current day number)
+  tempDate.setDate(tempDate.getDate() - dayNum + 3);
+
+  // ISO 8601 week number of the year for this date
+  const firstThursday = tempDate.valueOf();
+
+  // Set the target to the first day of the year
+  // First set the target to January 1st
+  tempDate.setMonth(0, 1);
+
+  // If this is not a Thursday, set the target to the next Thursday
+  if (tempDate.getDay() !== 4) {
+    tempDate.setMonth(0, 1 + ((4 - tempDate.getDay()) + 7) % 7);
+  }
+
+  // The weeknumber is the number of weeks between the first Thursday of the year
+  // and the Thursday in the target week
+  return 1 + Math.ceil((firstThursday - tempDate.valueOf()) / 604800000); // 604800000 = number of milliseconds in a week
+}
+
 interface Session {
   sessionId: string;
   doctorName: string;
@@ -202,6 +231,8 @@ const DoctorHome = () => {
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
   };
+
+
   return (
     <>
       <div className="mt-2 ml-4">
@@ -228,6 +259,7 @@ const DoctorHome = () => {
             <div className="m-4">
               <div style={wrapperStyle}>
                 <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+                {/* <DoctorHomeCalender data={sessionData} /> */}
               </div>
             </div>
             {sessionData.map((session, index) => (
@@ -289,7 +321,19 @@ const DoctorHome = () => {
               <div className="flex flex-col">
                 <div className="p-6 text-center">
                   <p>Sessions Yesterday</p>
-                  <h1 className="text-center text-[28px] ">23</h1>
+                  <h1 className="text-center text-[28px] ">
+                    {sessionData.filter(session => {
+                      const today = new Date();
+                      const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
+                      if (today.getFullYear() === endSessionDate.getFullYear() &&
+                        today.getMonth() === endSessionDate.getMonth() &&
+                        today.getDate() === endSessionDate.getDate()) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    }).length}
+                  </h1>
                 </div>
               </div>
             </div>
@@ -301,7 +345,18 @@ const DoctorHome = () => {
               <div className="flex flex-col">
                 <div className="p-6 text-center">
                   <p>Sessions This Week</p>
-                  <h1 className="text-center text-[28px] ">23</h1>
+                  <h1 className="text-center text-[28px] ">
+                    {sessionData.filter(session => {
+                      const today = new Date();
+                      const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
+
+                      if (getWeekNumber(today) === getWeekNumber(endSessionDate)) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    }).length}
+                  </h1>
                 </div>
               </div>
             </div>
@@ -309,7 +364,20 @@ const DoctorHome = () => {
               <div className="flex flex-col">
                 <div className="p-6 text-center">
                   <p>Sessions This Month</p>
-                  <h1 className="text-center text-[28px] ">23</h1>
+                  <h1 className="text-center text-[28px] ">
+                    {sessionData.filter(session => {
+                      const today = new Date();
+                      const startSessionDate = new Date(session.timeSlots.startTime.year,
+                        (session.timeSlots.startTime.month) - 1,
+                        session.timeSlots.startTime.day);
+                      if (today.getFullYear() === startSessionDate.getFullYear() &&
+                        today.getMonth() === startSessionDate.getMonth()) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    }).length}
+                  </h1>
                 </div>
               </div>
             </div>

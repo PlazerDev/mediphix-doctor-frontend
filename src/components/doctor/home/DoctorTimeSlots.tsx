@@ -1,6 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { format } from 'date-fns';
+function formatSriLankanPhoneNumber(phoneNumber: string): string {
+  // Remove non-numeric characters except the leading '+'
+  const cleaned = phoneNumber.replace(/[^\d+]/g, '');
+
+  // Check if the number starts with the country code +94 (Sri Lanka)
+  if (cleaned.startsWith('+94')) {
+    // Remove the country code and format the number to 071-2345678
+    const localNumber = cleaned.replace('+94', '0'); // Replace +94 with 0
+    return localNumber.replace(/(\d{3})(\d{7})/, '$1-$2'); // Format to 071-2345678
+  }
+
+  // If the number does not match expected format, return the original
+  return phoneNumber;
+}
 
 interface DoctorTimeSlotsProps {
   data: Session;
@@ -49,20 +62,7 @@ const DoctorTimeSlots = (props: DoctorTimeSlotsProps) => {
       hour12: true, // Use 12-hour clock
     });
   
-  function formatSriLankanPhoneNumber(phoneNumber: string): string {
-    // Remove non-numeric characters except the leading '+'
-    const cleaned = phoneNumber.replace(/[^\d+]/g, '');
-
-    // Check if the number starts with the country code +94 (Sri Lanka)
-    if (cleaned.startsWith('+94')) {
-      // Remove the country code and format the number to 071-2345678
-      const localNumber = cleaned.replace('+94', '0'); // Replace +94 with 0
-      return localNumber.replace(/(\d{3})(\d{7})/, '$1-$2'); // Format to 071-2345678
-    }
-
-    // If the number does not match expected format, return the original
-    return phoneNumber;
-  }
+  
 
 
   return (
