@@ -96,7 +96,7 @@ const PatentRecordEntryForm = () => {
         <label htmlFor="diagnosis" className="mb-2">
           Diagnosis Category(s) <span className="text-red-500">*</span>
         </label>
-        <div>
+        <div className="border rounded p-2">
           {diagnosisCategories.map((category, index) => (
             <Tag
               key={index}
