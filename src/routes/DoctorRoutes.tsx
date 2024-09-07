@@ -24,6 +24,7 @@ import RecordBookList from "../components/doctor/session/RecordBookList";
 import OngoingSession from "../components/doctor/session/ongoingSession/OngoingSession";
 import PatientConsultationDataEntry from "../components/doctor/session/ongoingSession/PatientConsultationDataEntry";
 import UpComingClinicSessionDetail from "../components/doctor/session/UpComingClinicSessionDetail";
+import ReviewRecordMessage from "../components/doctor/session/ongoingSession/ReviewRecordMessage";
 
 function DoctorRoutes() {
   return (
@@ -117,6 +118,7 @@ function DoctorRoutes() {
         />
         <Route path="/sessions/ongoingsession" element={<OngoingSession />} />
         <Route path="/sessions/ongoingsession/:refNumber" element={<PatientConsultationDataEntry />} />
+        <Route path="/sessions/ongoingsession/reviewrecord" element={<ReviewRecordMessage/>} />
       </Routes>
       
     </div>
