@@ -117,8 +117,7 @@ function DoctorRoutes() {
           element={<RecordBook />}
         />
         <Route path="/sessions/ongoingsession" element={<OngoingSession />} />
-        <Route path="/sessions/ongoingsession/:refNumber" element={<PatientConsultationDataEntry />} />
-        <Route path="/sessions/ongoingsession/reviewrecord" element={<ReviewRecordMessage/>} />
+        
       </Routes>
       
     </div>

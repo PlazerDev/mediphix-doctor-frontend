@@ -1,8 +1,10 @@
-import { useState } from "react";
 import { Divider } from "antd";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
 
-const PatientRecord = () => {
+interface RecordProps {
+  formData: any;
+}
+
+const PatientRecord = ({ formData }: RecordProps) => {
   return (
     <>
       <div className="bg-[#FFFFFF] rounded-[16px] py-4 px-8 mx-4">
@@ -11,11 +13,11 @@ const PatientRecord = () => {
           <div className="grid grid-cols-5 gap-y-2 gap-x-4">
             <div>
               <p className="text-sm text-[#868686]">Reference Number</p>
-              <p></p>
+              <p>{formData.refNumber}</p>
             </div>
             <div>
               <p className="text-sm text-[#868686]">Date</p>
-              <p></p>
+              <p>{formData.refNumber}</p>
             </div>
             <div>
               <p className="text-sm text-[#868686]">Time Slot</p>

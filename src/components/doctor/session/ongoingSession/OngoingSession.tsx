@@ -1,9 +1,17 @@
 import { Breadcrumb } from "antd";
 import PatientConsultationDataEntry from "./PatientConsultationDataEntry";
 import SessionList from "./SessionList";
-import BottomButtonPanel from "./BottomButtonPanel";
+import { useState } from "react";
+import PatientRecord from "./PatientRecord";
+import ReviewRecordMessage from "./ReviewRecordMessage";
 
 const OngoingSession = () => {
+  const [formData, setFormData] = useState(null);
+
+  const handleFormSubmit = (data: any) => {
+    setFormData(data);
+  };
+  
   return (
     <>
       <div>
@@ -25,11 +33,19 @@ const OngoingSession = () => {
           ]}
         />
       </div>
-      <div className="m-4 flex gap-4">
+    
+      {!formData ? (
+        <div className="m-4 flex gap-4">
         <SessionList />
-        <PatientConsultationDataEntry />
-      </div>
-      <BottomButtonPanel />
+        <PatientConsultationDataEntry onSubmit={handleFormSubmit} />
+        </div >
+      ) : (
+        <>
+        <ReviewRecordMessage />
+        <PatientRecord formData={formData} />
+        </>
+      )}
+
     </>
   );
 };

@@ -6,7 +6,7 @@ import patientImage from "../../../../assets/images/session/patientImage.jpeg";
 import { useState } from "react";
 import { CheckCircleFilled } from "@ant-design/icons";
 
-const PatientConsultationDataEntry = () => {
+const PatientConsultationDataEntry = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
   const [patientData, setPatientData] = useState({
     name: "Vishwa Sandaruwan",
     age: 23,
@@ -79,7 +79,7 @@ const PatientConsultationDataEntry = () => {
           Patient Consultation Data Entry
         </div>
         <div className="p-4">
-          <PatentRecordEntryForm />
+          <PatentRecordEntryForm onSubmit={onSubmit} />
         </div>
       </div>
     </>
