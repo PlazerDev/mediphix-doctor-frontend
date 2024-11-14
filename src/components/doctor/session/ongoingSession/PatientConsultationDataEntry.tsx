@@ -3,20 +3,16 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from "react-router-dom";
 import PatentRecordEntryForm from "./PatentRecordEntryForm";
 import patientImage from "../../../../assets/images/session/patientImage.jpeg";
-import { useState } from "react";
 import { CheckCircleFilled } from "@ant-design/icons";
 
-const PatientConsultationDataEntry = ({ onSubmit }: { onSubmit: (data: any) => void }) => {
-  const [patientData, setPatientData] = useState({
-    name: "Vishwa Sandaruwan",
-    age: 23,
-    sex: "Male",
-    nationality: "LK",
-  });
-  const [appointmentData, setAppointmentData] = useState({
-    refNumber: "REF_1525",
-    paymentStatus: "Done",
-  });
+interface RecordProps {
+  onSubmit: any;
+  patientData: any;
+  appointmentData: any;
+}
+
+const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}: RecordProps) => {
+
   return (
     <>
       <div className="flex flex-col bg-[#FFFFFF] rounded-[16px] w-4/5">
