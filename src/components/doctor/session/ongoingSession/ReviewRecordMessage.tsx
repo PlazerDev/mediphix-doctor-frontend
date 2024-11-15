@@ -1,5 +1,4 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import PatientRecord from "./PatientRecord";
 
 const ReviewRecordMessage = () => {
   return (
@@ -12,7 +11,6 @@ const ReviewRecordMessage = () => {
         </p>
         <p className="text-[#868686]"><ExclamationCircleFilled className="text-[#868686] mr-1"/>Note that this action cannot be reversed</p>
       </div>
-      <PatientRecord/>
     </>
   );
 };

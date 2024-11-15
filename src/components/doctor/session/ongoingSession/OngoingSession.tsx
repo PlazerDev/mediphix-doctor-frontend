@@ -1,9 +1,35 @@
 import { Breadcrumb } from "antd";
 import PatientConsultationDataEntry from "./PatientConsultationDataEntry";
 import SessionList from "./SessionList";
-import BottomButtonPanel from "./BottomButtonPanel";
+import { useState } from "react";
+import PatientRecord from "./PatientRecord";
+import ReviewRecordMessage from "./ReviewRecordMessage";
 
 const OngoingSession = () => {
+  const [formData, setFormData] = useState(null);
+
+  const [patientData, setPatientData] = useState({
+    name: "Vishwa Sandaruwan",
+    age: 23,
+    sex: "Male",
+    nationality: "LK",
+  });
+  const [appointmentData, setAppointmentData] = useState({
+    refNumber: "REF_1525",
+    date: "2024/12/04",
+    timeSlot: "03.00 PM - 04.00 PM",
+    medicalCenter: "Nawaloka Hospital",
+    doctor: "Dr.V.V.Alwis",
+    appointCatergory: "OPD",
+    queueNo: "03",
+    startTime: "03.27 PM",
+    paymentStatus: "Done",
+  });
+
+  const handleFormSubmit = (data: any) => {
+    setFormData(data);
+  };
+
   return (
     <>
       <div>
@@ -25,11 +51,26 @@ const OngoingSession = () => {
           ]}
         />
       </div>
-      <div className="m-4 flex gap-4">
-        <SessionList />
-        <PatientConsultationDataEntry />
-      </div>
-      <BottomButtonPanel />
+
+      {!formData ? (
+        <div className="m-4 flex gap-4">
+          <SessionList />
+          <PatientConsultationDataEntry
+            onSubmit={handleFormSubmit}
+            patientData={patientData}
+            appointmentData={appointmentData}
+          />
+        </div>
+      ) : (
+        <>
+          <ReviewRecordMessage />
+          <PatientRecord
+            formData={formData}
+            patientData={patientData}
+            appointmentData={appointmentData}
+          />
+        </>
+      )}
     </>
   );
 };
