@@ -2,7 +2,7 @@ import { useAuthContext } from "@asgardeo/auth-react";
 import logo from "./../../../assets/images/landing-page/mediphix_logo.png";
 import DropDown from "./DropDown";
 import BtnWithoutBorder from "./BtnWithoutBorder";
-import BtnWithBorder from "./BtnWithBorder";
+import { Link } from "react-router-dom";
 
 function Navigation() {
   const { signIn } = useAuthContext();
@@ -17,7 +17,11 @@ function Navigation() {
       </div>
       <div className="flex flex-row gap-4">
         <BtnWithoutBorder title="Login" onClickFunction={() => signIn()} />
-        <BtnWithBorder title="Register" />
+        <Link to="/signup">
+          <div className="border-2 border-white flex items-center justify-center rounded-md px-4 py-1 text-white hover:bg-white hover:text-mediphix_accent hover:cursor-pointer">
+            Register
+          </div>
+        </Link>
       </div>
     </div>
   );
