@@ -6,9 +6,9 @@ import Step1Card from "./Step1Card";
 function SignUpCardBody() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   return (
-    <div className="bg-mediphix_card_background rounded-lg w-full p-8 mx-40">
+    <div className="bg-mediphix_card_background rounded-lg w-full px-8 mx-40">
       <div className="flex items-center justify-center">
-        <img src={logo} alt="" className="w-20" />
+        <img src={logo} alt="" className="w-24" />
       </div>
       <div>
         <Steps
