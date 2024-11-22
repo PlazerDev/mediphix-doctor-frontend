@@ -1,18 +1,12 @@
-import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Button, Input, Select } from "antd";
-import { useForm, Controller } from "react-hook-form";
+import { UserData } from "./SignUpCardBody";
 
-interface UserData {
-  name: string;
-  slmcNumber: string;
-  nic: string;
-  education: string;
-  mobileNumber: string;
-  specialization: string;
-  appointmentCategories: string[];
+interface Props {
+  nextBtnHandler: (data: Partial<UserData>) => void; // Updated prop type
 }
 
-const Step1Card: React.FC = () => {
+function Step1Card({ nextBtnHandler }: Props) {
   const {
     control,
     handleSubmit,
@@ -24,7 +18,7 @@ const Step1Card: React.FC = () => {
   });
 
   const onSubmit = (data: UserData) => {
-    console.log("Form Data:", data);
+    nextBtnHandler(data);
   };
 
   return (
@@ -188,7 +182,6 @@ const Step1Card: React.FC = () => {
             </span>
           )}
         </div>
-
         <div className="flex justify-end my-4">
           <Button
             type="primary"
@@ -201,6 +194,6 @@ const Step1Card: React.FC = () => {
       </form>
     </div>
   );
-};
+}
 
 export default Step1Card;
