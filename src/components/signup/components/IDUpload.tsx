@@ -30,7 +30,7 @@ function IDUpload() {
   const uploadPropsBack: UploadProps = {
     name: "file",
     multiple: false,
-    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    action: "http://localhost:9000/upload/doctoridfront",
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
