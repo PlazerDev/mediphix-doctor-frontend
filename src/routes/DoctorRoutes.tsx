@@ -24,6 +24,10 @@ import RecordBookList from "../components/doctor/session/RecordBookList";
 import OngoingSession from "../components/doctor/session/ongoingSession/OngoingSession";
 import PatientConsultationDataEntry from "../components/doctor/session/ongoingSession/PatientConsultationDataEntry";
 import UpComingClinicSessionDetail from "../components/doctor/session/UpComingClinicSessionDetail";
+import ReviewRecordMessage from "../components/doctor/session/ongoingSession/ReviewRecordMessage";
+import VacanciesMain from "../components/doctor/medicalCenters/VacanciesMain";
+import VacanciesDetailed from "../components/doctor/medicalCenters/VacanciesDetailed";
+import VacanciesMyRequests from "../components/doctor/medicalCenters/VacanciesMyRequests";
 
 function DoctorRoutes() {
   return (
@@ -38,7 +42,7 @@ function DoctorRoutes() {
         ]}
       />
       <Routes>
-        <Route path="/home" element={<DoctorHome/>} />
+        <Route path="/home" element={<DoctorHome />} />
         <Route
           path="/medicalcenters"
           element={
@@ -65,6 +69,18 @@ function DoctorRoutes() {
         <Route
           path="/medicalcenters/mymedicalcenters"
           element={<MyMedicalCenters />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/vacancies"
+          element={<VacanciesMain />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/vacancies/:id"
+          element={<VacanciesDetailed />}
+        />
+        <Route
+          path="/medicalcenters/mymedicalcenters/vacancies/requests"
+          element={<VacanciesMyRequests />}
         />
         <Route
           path="/medicalcenters/mymedicalcenters/:centerName"
@@ -116,9 +132,7 @@ function DoctorRoutes() {
           element={<RecordBook />}
         />
         <Route path="/sessions/ongoingsession" element={<OngoingSession />} />
-        <Route path="/sessions/ongoingsession/:refNumber" element={<PatientConsultationDataEntry />} />
       </Routes>
-      
     </div>
   );
 }

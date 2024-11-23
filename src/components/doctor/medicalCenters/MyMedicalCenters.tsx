@@ -2,6 +2,8 @@ import { useState } from "react";
 import CenterSearchPannel from "./CenterSearchPannel";
 import { Breadcrumb } from "antd";
 import MyCenterdetailCard from "./MyCenterDetailCard";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 interface Center {
   name: string;
@@ -49,6 +51,16 @@ const MyMedicalCenters = () => {
           ]}
         />
       </div>
+      {/* Added a button for the vacancy */}
+      <Link
+        className="mx-4 mt-4  flex flex-row justify-start"
+        to={"/doctor/medicalcenters/mymedicalcenters/vacancies"}
+      >
+        <p className="flex items-center gap-4 text-mediphix_card_background bg-mediphix_accent px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-[#ff8b2d]">
+          Checkout Vacancies
+          <FaArrowRightLong />
+        </p>
+      </Link>
       <CenterSearchPannel />
       <div>
         {centerList.map((list, index) => (
