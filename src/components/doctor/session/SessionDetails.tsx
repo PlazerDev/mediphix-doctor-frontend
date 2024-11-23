@@ -1,18 +1,8 @@
 import { useState } from "react";
 import { Divider } from "antd";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import PatientNavigation from "../../patient/navigation/PatientNavigation";
 import { Breadcrumb } from "antd";
-
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log("search:", value);
-};
-
-
+import { Link } from "react-router-dom";
 
 const SessionDetails = () => {
   const [data, setData] = useState({
@@ -20,24 +10,24 @@ const SessionDetails = () => {
       referenceNumber: "REF_1598",
       date: "2024/June/13",
       timeSlot: "03.00 PM - 04.00 PM",
-      queueNumber:"03",
+      queueNumber: "03",
       medicalCenter: "Aloka Medical Center",
       appointmentCategory: "OPD",
       sessionStart: "03.27 PM",
       sessionEnd: "03.41 PM",
     },
-    patientDetails:{
-      patientName:"Vishawa Sadaruwan",
-      Age:"25",
-      Sex:"Male",
-      Nationality:"Sri Lankan",
+    patientDetails: {
+      patientName: "Vishawa Sadaruwan",
+      Age: "25",
+      Sex: "Male",
+      Nationality: "LK",
     },
-    
-    labDetails:{
-      testType:"Blood Test",
-      testName:"Lipid Profile",
-      priorityLevel:"High",
-      labStatus:"Pending",
+
+    labDetails: {
+      testType: "Blood Test",
+      testName: "Lipid Profile",
+      priorityLevel: "High",
+      labStatus: "Pending",
     },
     symptoms: ["Chest pain", "Shortness of breath", "Fatigue"],
     diagnosis: {
@@ -58,12 +48,12 @@ const SessionDetails = () => {
 
   return (
     <div>
-     <PatientNavigation />
-     <div>
+      <div>
         <p className="text-xl font-bold ml-[1%] mt-[1%]">
-        Session -  2024 June 13 at 03.10 PM
+          Session - {data.appointmentDetails.date} at{" "}
+          {data.appointmentDetails.sessionStart}
         </p>
-        </div>
+      </div>
       <div>
         <Breadcrumb
           className="ml-[1%]"
@@ -75,7 +65,7 @@ const SessionDetails = () => {
               title: <a href="">Previous Sessions</a>,
             },
             {
-              title: <a href=""> REF_1653</a>,
+              title: <a href=""> {data.appointmentDetails.referenceNumber}</a>,
             },
           ]}
         />
@@ -99,7 +89,14 @@ const SessionDetails = () => {
             </div>
             <div>
               <p className="text-sm text-[#868686]">Medical Center</p>
-              <p className="text-sm text-[#FFA500]"><a href="#" style={{ color: '#FFA500',textDecoration: 'underline' }}>{data.appointmentDetails.medicalCenter}</a></p>
+              <p className="text-sm text-[#FFA500]">
+                <a
+                  href="#"
+                  style={{ color: "#FFA500", textDecoration: "underline" }}
+                >
+                  {data.appointmentDetails.medicalCenter}
+                </a>
+              </p>
             </div>
             <div>
               <p className="text-sm text-[#868686]">Queue Number</p>
@@ -122,42 +119,45 @@ const SessionDetails = () => {
         <Divider />
 
         <div className="bg-[#FFFFFF] rounded-[16px]  ml-1 mr-1 mt-2">
-        <div>
-        <h3 className="text-lg mb-3 ">Patient Details</h3>
-        <div className="grid grid-cols-5 gap-y-2 gap-x-4">
-        <div>
-              <p className="text-sm text-[#868686]">Patient Name</p>
-              <p>{data.patientDetails.patientName}</p>
-         </div>
-         <div>
-              <p className="text-sm text-[#868686]">Age</p>
-              <p>{data.patientDetails.Age}</p>
-         </div>
-         <div>
-              <p className="text-sm text-[#868686]">Sex</p>
-              <p>{data.patientDetails.Sex}</p>
-         </div>
-         <div>
-              <p className="text-sm text-[#868686]">Nationality</p>
-              <p>{data.patientDetails.Nationality}</p>
-         </div>
-         <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
-                <MdOutlineRemoveRedEye className="text-lg mr-1" />
-                <p className="text-sm ">Investigate Record Book</p>
-          </div>     
-          <div className="mt-2">
-          <Divider/>
-          <h3 className="text-lg mb-3 ">Symptoms</h3>
-          <ul className="list-disc custom-disc-color ml-5">
-            {data.symptoms.map((symptom, index) => (
-              <li key={index}>{symptom}</li>
-            ))}
-          </ul>
+          <div>
+            <h3 className="text-lg mb-3 ">Patient Details</h3>
+            <div className="grid grid-cols-5 gap-y-2 gap-x-4">
+              <div>
+                <p className="text-sm text-[#868686]">Patient Name</p>
+                <p>{data.patientDetails.patientName}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#868686]">Age</p>
+                <p>{data.patientDetails.Age}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#868686]">Sex</p>
+                <p>{data.patientDetails.Sex}</p>
+              </div>
+              <div>
+                <p className="text-sm text-[#868686]">Nationality</p>
+                <p>{data.patientDetails.Nationality}</p>
+              </div>
+              <Link to="/doctor/sessions/recordbook">
+                <div className="flex justify-center bg-[#FF7300] rounded-[8px] align-middle p-2 text-[#FFFFFF]  w-[90%] h-10">
+                  <MdOutlineRemoveRedEye className="text-lg mr-1" />
+                  <p className="text-sm ">Investigate Record Book</p>
+                </div>
+              </Link>
+
+              <div className="mt-2">
+                <Divider />
+                <h3 className="text-lg mb-3 ">Symptoms</h3>
+                <ul className="list-disc custom-disc-color ml-5">
+                  {data.symptoms.map((symptom, index) => (
+                    <li key={index}>{symptom}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-        </div> 
-        </div>
-        </div>
-       <Divider />
+        <Divider />
         <div>
           <h3 className="text-lg mb-3">Diagnosis</h3>
           <p className="text-sm text-[#868686]">Diagnosis Category</p>
@@ -188,39 +188,36 @@ const SessionDetails = () => {
           <h3 className="text-lg mb-3 ">Special Note</h3>
           <p>{data.specialNote}</p>
         </div>
-    
-      <Divider/>
-      <div className="mt-2">
-        <h3 className="text-lg mb-3 ">Lab Report Details</h3>
-        <div className="grid grid-cols-5 gap-y-2 gap-x-4">
-        <div>
+
+        <Divider />
+        <div className="mt-2">
+          <h3 className="text-lg mb-3 ">Lab Report Details</h3>
+          <div className="grid grid-cols-5 gap-y-2 gap-x-4">
+            <div>
               <p className="text-sm text-[#868686]">Test Type</p>
               <p>{data.labDetails.testType}</p>
-         </div>
-         <div>
+            </div>
+            <div>
               <p className="text-sm text-[#868686]">Test Name</p>
               <p>{data.labDetails.testName}</p>
-         </div>
-         <div>
+            </div>
+            <div>
               <p className="text-sm text-[#868686]">Priority Level</p>
               <p>{data.labDetails.priorityLevel}</p>
-         </div>
-         <div>
+            </div>
+            <div>
               <p className="text-sm text-[#868686]">Status</p>
               <p>{data.labDetails.labStatus}</p>
-         </div>
-         <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-3 text-[#FFFFFF]  w-[80%] h-10">
-                <MdOutlineRemoveRedEye className="text-lg mr-1" />
-                <p className="text-sm ">View the report</p>
-          </div>     
-          
-
-    </div>
-    </div>
-   
-    </div>
+            </div>
+            <div className="flex bg-[#FF7300] rounded-[8px] align-middle p-3 text-[#FFFFFF]  w-[80%] h-10">
+              <MdOutlineRemoveRedEye className="text-lg mr-1" />
+              <p className="text-sm ">View the report</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
-    
-export default SessionDetails
+
+export default SessionDetails;
