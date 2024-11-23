@@ -8,6 +8,9 @@ import AllCenterDetailCard from "./AllCenterDetailCard";
 import axios, { AxiosRequestConfig } from "axios";
 import Swal from "sweetalert2";
 import Loading from "../../Loading";
+import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "react-router-dom";
+import { MedicalCenterService } from "../../../services/MedicalCenterService";
 
 
 interface Center {
@@ -19,6 +22,24 @@ interface Center {
   phoneNo: string;
 }
 
+interface MedicalCenter {
+        _id: string,
+        name: string,
+        address: string,
+        mobile: string,
+        email: string,
+        district: string,
+        verified: boolean,
+        appointmentCategories: string[],
+        mediaStorage: any,
+        specialNotes: any,
+        doctors: string [],
+        appointments: any,
+        patients: string,
+        medicalCenterStaff: string,
+        fee: any
+}
+
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 let count:number = 0;
 
@@ -27,9 +48,7 @@ interface TokenData {
 }
 
 const AllMedicalCenters = () => {
-  const [centerList, setCenterList] = useState<Center[]>([
-  ]);
-  const [loading, setLoading] = useState<boolean>(true);
+
   const { token } = theme.useToken();
   let access_token: string = "";
 
@@ -64,10 +83,12 @@ const AllMedicalCenters = () => {
       })
       return "";
     }
+    
   }
  
 
   access_token = getToken();
+  console.log("Access token:", access_token);
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -77,40 +98,59 @@ const AllMedicalCenters = () => {
 
   
 
-  const getAllMedicalCenters = async () => {
+  // const getAllMedicalCenters = async () => {
  
-    try {
-      console.log("Getting all medical centers");
-      const response = await axios.get(`${backendURL}/doctor/getAllMedicalCenters`,config);
-      console.log("Post created:", response);
-      response.data.forEach((center: any) => {
-        setCenterList((prev) => [...prev, {
-          name: center.name,
-          address: center.address,
-          appointmentCategory: center.appointmentCategories || [],
-          noOfDoctors: center.doctors ? center.doctors.length : 0,
-          description: center.specialNotes || "No description available",
-          phoneNo: center.mobile || "No phone number available"
-        }]);
-      });
-      // return response.data;
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
-    finally{
-      setLoading(false);
-    }
-  }
+  //   try {
+  //     console.log("Getting all medical centers");
+  //     const response = await axios.get(`${backendURL}/doctor/getAllMedicalCenters`,config);
+  //     console.log("Post created:", response);
+  //     response.data.forEach((center: any) => {
+  //       setCenterList((prev) => [...prev, {
+  //         name: center.name,
+  //         address: center.address,
+  //         appointmentCategory: center.appointmentCategories || [],
+  //         noOfDoctors: center.doctors ? center.doctors.length : 0,
+  //         description: center.specialNotes || "No description available",
+  //         phoneNo: center.mobile || "No phone number available"
+  //       }]);
+  //     });
+  //     // return response.data;
+  //   } catch (error) {
+  //     console.error("Error creating post:", error);
+  //   }
+  //   finally{
+  //     setLoading(false);
+  //   }
+  // }
+
+
+
+  const {
+      data: allMedicalCenters,
+      isError,
+      isLoading,
+  } = useQuery({
+      queryKey: ["medicalcenter", backendURL, config],
+      queryFn: () => MedicalCenterService.getMedicalCenterData(backendURL, config),
+      staleTime: 200000,
+  });
 
   
-  useEffect(() => {
-      getAllMedicalCenters();
+  
+
+  
+
+  
+
+  
+  // useEffect(() => {
+  //     getAllMedicalCenters();
       
 
   
-  },[]);
+  // },[]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen w-screen bg-transparent">
         <Loading footer={false} />
@@ -141,9 +181,11 @@ const AllMedicalCenters = () => {
       <CenterSearchPannel />
       
       <div>
-        {centerList.map((list, index) => (
+        {allMedicalCenters?.map((list, index) => (
           <div key={index} >
-            <AllCenterDetailCard {...list} />
+            <AllCenterDetailCard appointmentCategory={[list.appointmentCategories]} 
+            noOfDoctors={list.doctors.length} description={list.specialNotes} 
+            phoneNo={list.mobile} name={list.name} address={list.address} />
           </div>
         ))}
       </div>
