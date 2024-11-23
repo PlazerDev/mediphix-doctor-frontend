@@ -59,7 +59,7 @@ const DescriptiveCenterDetails = ({
             <h6 className="text-sm text-[#868686]">Description</h6>
             <p>{description}</p>
           </div>
-          <Link to={"/doctor/requestToJoin"}>
+          <Link to={"/doctor/medicalcenters/requestToJoin"}>
             <div className="bg-[#FF7300] text-[#FFFFFF] rounded-md p-2 w-fit flex items-center mt-4">
               <p className="text-[#FFFFFF]">Request to join</p>
             </div>

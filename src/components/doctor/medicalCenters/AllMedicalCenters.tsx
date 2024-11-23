@@ -98,32 +98,6 @@ const AllMedicalCenters = () => {
 
   
 
-  // const getAllMedicalCenters = async () => {
- 
-  //   try {
-  //     console.log("Getting all medical centers");
-  //     const response = await axios.get(`${backendURL}/doctor/getAllMedicalCenters`,config);
-  //     console.log("Post created:", response);
-  //     response.data.forEach((center: any) => {
-  //       setCenterList((prev) => [...prev, {
-  //         name: center.name,
-  //         address: center.address,
-  //         appointmentCategory: center.appointmentCategories || [],
-  //         noOfDoctors: center.doctors ? center.doctors.length : 0,
-  //         description: center.specialNotes || "No description available",
-  //         phoneNo: center.mobile || "No phone number available"
-  //       }]);
-  //     });
-  //     // return response.data;
-  //   } catch (error) {
-  //     console.error("Error creating post:", error);
-  //   }
-  //   finally{
-  //     setLoading(false);
-  //   }
-  // }
-
-
 
   const {
       data: allMedicalCenters,
@@ -135,20 +109,7 @@ const AllMedicalCenters = () => {
       staleTime: 200000,
   });
 
-  
-  
 
-  
-
-  
-
-  
-  // useEffect(() => {
-  //     getAllMedicalCenters();
-      
-
-  
-  // },[]);
 
   if (isLoading) {
     return (
