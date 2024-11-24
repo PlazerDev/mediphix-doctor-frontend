@@ -59,7 +59,7 @@ const PatientRecord = ({
   const mutation = useMutation({
     mutationFn: async () => {
       const response = await axios.post(
-        `${backendURL}/clinic/submitPatientRecord`,
+        `${backendURL}/doctor/submitPatientRecord`,
         { formData, patientData, appointmentData },
         config
       );
