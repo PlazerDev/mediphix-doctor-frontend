@@ -19,6 +19,7 @@ function App() {
       "profile",
       "update_own_doctor_sessions",
       "retrive_appoinments",
+      "submit_patient_records",
     ],
   };
   return (
