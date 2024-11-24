@@ -140,7 +140,7 @@ const DoctorHome = () => {
 
 
   const {
-    data: session,
+    data: sessionDataFromQuery,
     isError,
     isPending,
     error
@@ -156,6 +156,9 @@ const DoctorHome = () => {
 
         if (response.status === 200) {
           console.log("response.data: ", response.data);
+
+          // Set session data in state
+          setSessionData(response.data);
 
           // Return data from the function
           return response.data;
@@ -234,7 +237,8 @@ const DoctorHome = () => {
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
-          Good Evening , Dr. V. {<GetDoctorName config={config} /> }
+          Good Evening , Dr. V. Visal Alwis
+          {/* Good Evening , Dr. V. {<GetDoctorName config={config} /> } */}
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
       </div>
@@ -387,45 +391,7 @@ const DoctorHome = () => {
   );
 };
 
-// function GetDoctorName(config: any) {
-//   // const { isPending, error, data } = useQuery({
-//   //   queryKey: ['repoData'],
-//   //   queryFn: () =>
-//   //     fetch('${backendURL}/doctor/getDoctorName?mobile=0769418929').then((res) =>
-//   //       res.json(),
-//   //     ),
-//   // })
-//   const {
-//     data: doctorName,
-//     isError,
-//     isPending,
-//     error
-//   } = useQuery({
-//     queryKey: ["patient", { backendURL }, { config }],
-//     staleTime: 20000,
-//     queryFn: async () => {
-//       console.log("Fetching patient data...");
 
-//       try {
-//         // Fetch data using axios, specifying the response type
-//         const response = await axios.get(`${backendURL}/doctor/getDoctorName?mobile=0769418929`, config);
-
-//         if (response.status === 200) {
-//           return (
-    
-//             <div>
-//               Good Evening , Dr. { doctorName}
-//             </div>
-//           );
-//         }
-//         if (isPending) return <Loading footer={false} />;
-          
-//       } catch (error: any) {
-//         if (error) return 'An error has occurred: ' + error.message
-//       }
-//     }
-//   });
-// }
 function GetDoctorName({ config }: { config: any }) {
   const { data: doctorName, isError, isPending, error } = useQuery({
     queryKey: ["doctorName", { backendURL }, { config }],
