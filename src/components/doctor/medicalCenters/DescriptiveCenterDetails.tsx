@@ -1,7 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { BiSolidBadgeCheck } from "react-icons/bi";
 import centerImage from "../../../assets/images/medical-center/NawalokaHospitals.jpeg";
 import bgimage from "../../../assets/images/medical-center/backgroundDesign.png";
-import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { theme } from "antd";
+import Swal from "sweetalert2";
+import axios, { AxiosRequestConfig } from "axios";
+import TokenService from "../../../services/TokenService";
+
 
 interface Props {
   name: string;
@@ -9,6 +16,11 @@ interface Props {
   description: string;
   phoneNo: string;
 }
+interface TokenData {
+  access_token: string;
+}
+
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const DescriptiveCenterDetails = ({
   name,
@@ -16,6 +28,22 @@ const DescriptiveCenterDetails = ({
   description,
   phoneNo,
 }: Props) => {
+  
+ 
+
+  const access_token = TokenService.getToken();
+
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    }
+  };
+
+
+  const queryClient = useQueryClient();
+  console.log("cash :",queryClient.getQueryData(["medicalcenter", backendURL, config]));
+  
   return (
     <>
       <div className="bg-[#ffffff] rounded-[16px] m-4 ">
@@ -59,11 +87,11 @@ const DescriptiveCenterDetails = ({
             <h6 className="text-sm text-[#868686]">Description</h6>
             <p>{description}</p>
           </div>
-          <Link to={"/doctor/medicalcenters/requestToJoin"}>
+        
             <div className="bg-[#FF7300] text-[#FFFFFF] rounded-md p-2 w-fit flex items-center mt-4">
               <p className="text-[#FFFFFF]">Request to join</p>
             </div>
-          </Link>
+          
         </div>
       </div>
     </>

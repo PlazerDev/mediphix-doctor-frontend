@@ -8,7 +8,7 @@ import AllCenterDetailCard from "./AllCenterDetailCard";
 import axios, { AxiosRequestConfig } from "axios";
 import Swal from "sweetalert2";
 import Loading from "../../Loading";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
 import { MedicalCenterService } from "../../../services/MedicalCenterService";
 
@@ -95,6 +95,8 @@ const AllMedicalCenters = () => {
       'Authorization': `Bearer ${access_token}`
     }
   };
+  const queryClient = useQueryClient();
+  console.log("cache: ",queryClient.getQueryData(["medicalcenter", backendURL,config]));
 
   
 
