@@ -1,7 +1,5 @@
 import profilepic from "././././../../../assets/images/patient/appoinment/NawalokaHospitals.jpeg";
 
-
-
 const SessionDetailsCard = () => {
   return (
     <>

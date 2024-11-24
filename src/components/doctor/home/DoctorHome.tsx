@@ -140,7 +140,7 @@ const DoctorHome = () => {
 
 
   const {
-    data: sessionDataFromQuery,
+    data: session,
     isError,
     isPending,
     error
@@ -156,9 +156,6 @@ const DoctorHome = () => {
 
         if (response.status === 200) {
           console.log("response.data: ", response.data);
-
-          // Set session data in state
-          setSessionData(response.data);
 
           // Return data from the function
           return response.data;

@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import CenterSearchPannel from "./CenterSearchPannel";
 import { Breadcrumb, theme } from "antd";
 import MyCenterdetailCard from "./MyCenterDetailCard";
+
 import axios, { AxiosRequestConfig } from "axios";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import { MedicalCenterService } from "../../../services/MedicalCenterService";
 import Loading from "../../Loading";
+
+import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+
 
 interface Center {
   name: string;
@@ -110,6 +115,16 @@ console.log(myMedicalCenters);
           ]}
         />
       </div>
+      {/* Added a button for the vacancy */}
+      <Link
+        className="mx-4 mt-4  flex flex-row justify-start"
+        to={"/doctor/medicalcenters/mymedicalcenters/vacancies"}
+      >
+        <p className="flex items-center gap-4 text-mediphix_card_background bg-mediphix_accent px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-[#ff8b2d]">
+          Checkout Vacancies
+          <FaArrowRightLong />
+        </p>
+      </Link>
       <CenterSearchPannel />
       <div>
         {myMedicalCenters?.map((list, index) => (
