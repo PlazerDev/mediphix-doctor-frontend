@@ -117,7 +117,7 @@ function Step2Card({ nextBtnHandler }: Props) {
             <IDUpload />
           </div>
           <div className="flex-2">
-            <p>Enter a professional photo of you</p>
+            <p>Enter a professional photo of youself</p>
             <DPUpload />
           </div>
         </div>
