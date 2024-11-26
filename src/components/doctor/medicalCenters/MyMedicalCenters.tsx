@@ -1,9 +1,18 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from "react";
 import CenterSearchPannel from "./CenterSearchPannel";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, theme } from "antd";
 import MyCenterdetailCard from "./MyCenterDetailCard";
+
+import axios, { AxiosRequestConfig } from "axios";
+import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
+import { MedicalCenterService } from "../../../services/MedicalCenterService";
+import Loading from "../../Loading";
+
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+
 
 interface Center {
   name: string;
@@ -12,26 +21,81 @@ interface Center {
   description: string;
   phoneNo: string;
 }
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+
+interface TokenData {
+  access_token: string;
+}
 
 const MyMedicalCenters = () => {
-  const [centerList, setCenterList] = useState<Center[]>([
-    {
-      name: "Nawaloka Hospital",
-      address: "23 , Deshamanya H K Dharmadasa Mawatha, Colombo 00200",
-      appointmentCategory: ["OPD", "Heart Health", "Dental Care"],
-      description:
-        "At Navaloka Hospital, we provide top-notch healthcare with a patient-focused approach. Our expert team and advanced facilities ensure the best care for all your medical needs. Trust us for your health and well-being.",
-      phoneNo: "011-4564564",
-    },
-    {
-      name: "Asiri Hospital",
-      address: "23 , Deshamanya H K Dharmadasa Mawatha, Colombo 00200",
-      appointmentCategory: ["OPD", "Heart Health"],
-      description:
-        "At Asiri Hospital, we provide top-notch healthcare with a patient-focused approach. Our expert team and advanced facilities ensure the best care for all your medical needs. Trust us for your health and well-being.",
-      phoneNo: "011-4564564",
-    },
-  ]);
+
+  const { token } = theme.useToken();
+  let access_token: string = "";
+
+ 
+
+  function getToken(): string {
+    const sessionDataString: string | null = sessionStorage.getItem('session_data-instance_0-ws3zT_tcti_dAXam7cpJ9eL9rvwa');
+
+    if (!sessionDataString) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'No session token found. Please login!',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
+      return "";
+    }
+
+    try {
+      const sessionData: TokenData = JSON.parse(sessionDataString);
+      access_token = sessionData.access_token;
+      if (access_token == "") {
+        throw new Error("Access token not found in session data");
+      }
+      return access_token;
+    } catch (parseError) {
+      Swal.fire({
+        title: 'Error!',
+        text: "Invalid session data please login again.",
+        icon: "error",
+        confirmButtonText: 'OK'
+      })
+      return "";
+    }
+    
+  }
+ 
+
+  access_token = getToken();
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    }
+  };
+
+  const {
+    data: myMedicalCenters,
+    isError,
+    isLoading,
+} = useQuery({
+    queryKey: ["mymedicalcenters", backendURL, config],
+    queryFn: () => MedicalCenterService.getMyMedicalCenterData(backendURL, config),
+    staleTime: 200000,
+});
+
+if (isLoading) {
+  return (
+    <div className="flex items-center justify-center h-screen w-screen bg-transparent">
+      <Loading footer={false} />
+    </div>
+  );
+}
+console.log(myMedicalCenters);
+
+ 
 
   return (
     <>
@@ -63,9 +127,13 @@ const MyMedicalCenters = () => {
       </Link>
       <CenterSearchPannel />
       <div>
-        {centerList.map((list, index) => (
+        {myMedicalCenters?.map((list, index) => (
           <div key={index}>
-            <MyCenterdetailCard {...list} />
+            <MyCenterdetailCard appointmentCategory={[list.appointmentCategories]} 
+            description={list.specialNotes} 
+            phoneNo={list.mobile} 
+            name={list.name}
+            address={list.address}/>
           </div>
         ))}
       </div>

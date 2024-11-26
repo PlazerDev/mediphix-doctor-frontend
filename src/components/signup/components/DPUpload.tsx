@@ -5,7 +5,7 @@ import type { UploadFile, UploadProps } from "antd";
 
 const { Dragger } = Upload;
 
-function IDUpload() {
+function DPUpload() {
   const [frontID, setFrontID] = useState<UploadFile | null>(null);
   const [backID, setBackID] = useState<UploadFile | null>(null);
 
@@ -30,7 +30,7 @@ function IDUpload() {
   const uploadPropsBack: UploadProps = {
     name: "file",
     multiple: false,
-    action: "http://localhost:9000/upload/doctoridfront",
+    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
@@ -63,9 +63,8 @@ function IDUpload() {
 
   return (
     <div className="flex justify-between gap-4 mb-12">
-      {/* Front ID Uploader */}
-      <div className="flex-1">
-        <p className="text-mediphix_text_c">Upload Front Side of ID</p>
+      <div>
+        <p className="text-mediphix_text_c">Upload a Profile Picture</p>
         <Dragger {...uploadPropsFront}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
@@ -74,23 +73,7 @@ function IDUpload() {
             Click or drag file to this area to upload
           </p>
           <p className="ant-upload-hint">
-            Upload the front side of your ID card.
-          </p>
-        </Dragger>
-      </div>
-
-      {/* Back ID Uploader */}
-      <div className="flex-1">
-        <p className="text-mediphix_text_c">Upload Back Side of ID</p>
-        <Dragger {...uploadPropsBack}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Upload the back side of your ID card.
+            Upload a professional photo of yourself.
           </p>
         </Dragger>
       </div>
@@ -98,4 +81,4 @@ function IDUpload() {
   );
 }
 
-export default IDUpload;
+export default DPUpload;
