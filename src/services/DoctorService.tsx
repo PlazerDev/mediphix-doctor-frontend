@@ -2,17 +2,28 @@ import Swal from "sweetalert2";
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import ErrorService from "./ErrorService.tsx";
 
-interface Doctor {
-     name: string;
-     slmc: string;
-     nic: string;
-     education: string[];
-     mobile: string;
-     specialization?: string[];
-     email: string;
-     password: string;
-     confirmPassword: string;
-}
+export interface Doctor {
+    _id?: string;
+    name: string;
+    slmc: string;
+    nic: string;
+    education: string[];
+    mobile: string;
+    specialization?: string[];
+    email: string;
+    category?: string[];
+    availability?: string[];
+    verified: boolean;
+    patients?: string[];
+    medical_centers?: string[];
+    sessions?: string[];
+    channellings?: string[];
+    medical_records?: string[];
+    lab_reports?: string[];
+    profileImage?: string;
+    media_storage?: string;
+  }
+  
 
 
 export class DoctorService {
@@ -22,7 +33,7 @@ export class DoctorService {
     ): Promise<Doctor | undefined> {
         try {
             const response: AxiosResponse<Doctor> = await axios.get(
-                `${backendURL}/doctor/doctordata`,
+                `${backendURL}/doctor/getDoctorDetails`,
                 config
             );
 
@@ -43,4 +54,6 @@ export class DoctorService {
             return undefined; // Return undefined on error
         }
     }
+
+    
 }
