@@ -8,6 +8,7 @@ interface Center {
   noOfDoctors: number;
   description: string;
   phoneNo: string;
+  id:string;
 }
 
 
@@ -18,6 +19,7 @@ const AllCenterDetailCard = ({
     noOfDoctors,
     description,
     phoneNo,
+    id,
   }: Center) => {
   
     const createDisplayString = (items: string[], maxLength: number) => {
@@ -50,7 +52,7 @@ const AllCenterDetailCard = ({
         <>
           <Link
             to={{
-              pathname: "/doctor/medicalcenters/allmedicalcenters/" + name,
+              pathname: "/doctor/medicalcenters/allmedicalcenters/" + id,
             }}
             state={{
               name,
