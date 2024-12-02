@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "@asgardeo/auth-react": "^5.1.1",
+    "@eslint/config-array": "^0.19.0",
     "@tanstack/react-query": "^5.52.1",
     "antd": "^5.19.4",
     "aos": "^2.3.4",

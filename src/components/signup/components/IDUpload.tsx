@@ -5,14 +5,18 @@ import type { UploadFile, UploadProps } from "antd";
 
 const { Dragger } = Upload;
 
-function IDUpload() {
+interface IDUploadProps{
+  email: string;
+}
+
+function IDUpload({email}:IDUploadProps) {
   const [frontID, setFrontID] = useState<UploadFile | null>(null);
   const [backID, setBackID] = useState<UploadFile | null>(null);
 
   const uploadPropsFront: UploadProps = {
     name: "file",
     multiple: false,
-    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    action: `http://localhost:9000/media/upload?email=${email}&userType=doctor&uploadType=idFrontImage`,
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
@@ -30,7 +34,7 @@ function IDUpload() {
   const uploadPropsBack: UploadProps = {
     name: "file",
     multiple: false,
-    action: "http://localhost:9000/upload/doctoridfront",
+    action: `http://localhost:9000/media/upload?email=${email}&userType=doctor&uploadType=idBackImage`,
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {

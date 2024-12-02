@@ -5,14 +5,19 @@ import type { UploadFile, UploadProps } from "antd";
 
 const { Dragger } = Upload;
 
-function DPUpload() {
+interface DPUploadProps {
+  email: string;
+}
+
+function DPUpload({ email }: DPUploadProps) {
   const [frontID, setFrontID] = useState<UploadFile | null>(null);
   const [backID, setBackID] = useState<UploadFile | null>(null);
 
   const uploadPropsFront: UploadProps = {
     name: "file",
     multiple: false,
-    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    action:
+      `http://localhost:9000/media/upload?email=${email}&userType=doctor&uploadType=profileImage`,
     onChange(info) {
       const { status } = info.file;
       if (status === "done") {
@@ -27,39 +32,6 @@ function DPUpload() {
     },
   };
 
-  const uploadPropsBack: UploadProps = {
-    name: "file",
-    multiple: false,
-    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-    onChange(info) {
-      const { status } = info.file;
-      if (status === "done") {
-        message.success(`${info.file.name} back side uploaded successfully.`);
-        setBackID(info.file); // Save the uploaded file to state
-      } else if (status === "error") {
-        message.error(`${info.file.name} back side upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped back ID files", e.dataTransfer.files);
-    },
-  };
-
-  const handleSubmit = () => {
-    if (!frontID || !backID) {
-      message.error("Both front and back sides of the ID must be uploaded.");
-      return;
-    }
-
-    const requestBody = {
-      frontID: frontID.response?.url, // Assuming the API response contains a file URL
-      backID: backID.response?.url,
-    };
-
-    console.log("Data to send to backend:", requestBody);
-
-    // Here you can make an API call to submit the `requestBody`
-  };
 
   return (
     <div className="flex justify-between gap-4 mb-12">
