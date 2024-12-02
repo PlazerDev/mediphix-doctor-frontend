@@ -136,7 +136,7 @@ const DoctorHome = () => {
     }
   };
 
-  console.log("before queryConfig: ", config);
+
 
 
   const {
@@ -152,7 +152,7 @@ const DoctorHome = () => {
 
       try {
         // Fetch data using axios, specifying the response type
-        const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetails?mobile=0769418929`, config);
+        const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetailsByDoctorId `, config);
 
         if (response.status === 200) {
           console.log("response.data: ", response.data);
@@ -222,7 +222,6 @@ const DoctorHome = () => {
     },
   });
 
-  console.log("after queryConfig: ", config);
   console.log("sessionData: ", sessionData);
 
 
@@ -237,7 +236,7 @@ const DoctorHome = () => {
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
-          Good Evening , Dr. V. Visal Alwis
+          {<GetDoctorName config={config} />}
           {/* Good Evening , Dr. V. {<GetDoctorName config={config} /> } */}
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
@@ -286,7 +285,7 @@ const DoctorHome = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center bg-contain">
-              {isPending ? <Loading footer={false} /> :
+              {/* {isPending ? <Loading footer={false} /> :
                 <OngoingSessionData
                   data={sessionData.filter(session => {
                     if (session.sessionStatus === "ONGOING") {
@@ -294,7 +293,7 @@ const DoctorHome = () => {
                     }
                   })}
                 />
-              }
+              } */}
             </div>
 
           </div>
@@ -393,26 +392,27 @@ const DoctorHome = () => {
 
 
 function GetDoctorName({ config }: { config: any }) {
-  const { data: doctorName, isError, isPending, error } = useQuery({
+  const { data: doctorDetails, isError, isPending, error } = useQuery({
     queryKey: ["doctorName", { backendURL }, { config }],
     staleTime: 20000,
     queryFn: async () => {
       console.log("Fetching doctor data...");
-      const response = await axios.get(`${backendURL}/doctor/getDoctorName?mobile=0769418929`, config);
+      const response = await axios.get(`${backendURL}/doctor/getDoctorDetails`, config);
       console.log("response: ", response);
       if (response.status === 200) {
         return response.data; // Return the fetched data (doctor's name)
       }
       throw new Error('Failed to fetch doctor data');
     }
+    
   });
-
+  console.log("doctorDetails: ", doctorDetails);
   if (isPending) return <Loading footer={false} />;
   if (isError) return <div>An error has occurred: {error?.message}</div>;
 
   return (
     <div>
-      Good Evening, Dr. {doctorName}
+      Good Evening, Dr. {doctorDetails.name}
     </div>
   );
 }
