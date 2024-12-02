@@ -148,10 +148,10 @@ const AllMedicalCenters = () => {
           <div key={index} >
             <AllCenterDetailCard appointmentCategory={[list.appointmentCategories]} 
             noOfDoctors={list.doctors.length} description={list.specialNotes} 
-            phoneNo={list.mobile} name={list.name} address={list.address} />
+            phoneNo={list.mobile} name={list.name} address={list.address} id={list._id} />
           </div>
         ))}
-      </div>
+      </div>    
     </>
   );
 };

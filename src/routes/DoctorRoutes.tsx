@@ -63,7 +63,7 @@ function DoctorRoutes() {
           element={<AllMedicalCenters />}
         />
         <Route
-          path="/medicalcenters/allmedicalcenters/:centerName"
+          path="/medicalcenters/allmedicalcenters/:id"
           element={<NotRegisteredCenter />}
         />
         <Route
@@ -83,11 +83,11 @@ function DoctorRoutes() {
           element={<VacanciesMyRequests />}
         />
         <Route
-          path="/medicalcenters/mymedicalcenters/:centerName"
+          path="/medicalcenters/mymedicalcenters/:id"
           element={<RegisteredCenter />}
         />
         <Route
-          path="/medicalcenters/mymedicalcenters/:centerName/:category"
+          path="/medicalcenters/mymedicalcenters/:id/:category"
           element={<AppointmentDetailsForEachCatagory />}
         />
         <Route
