@@ -39,7 +39,13 @@ const NotRegisteredCenter = () => {
           ]}
         />
       </div>
-      <DescriptiveCenterDetails name={name} address={address} description={description} phoneNo={phoneNo}  />
+      <DescriptiveCenterDetails 
+      name={name} 
+      address={address}
+      description={description} 
+      phoneNo={phoneNo} 
+      registered={false}
+       />
       <AvailableCatagorySection centerName={name} appointmentCategory={appointmentCategory}/>
       <NotJoined name={name}/>
     </>
