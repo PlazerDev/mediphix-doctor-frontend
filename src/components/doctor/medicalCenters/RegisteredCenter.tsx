@@ -42,6 +42,7 @@ const RegisteredCenter = () => {
         address={address}
         description={description}
         phoneNo={phoneNo}
+        registered={true}
       />
       <AvailableCatagorySection centerName={name} appointmentCategory={appointmentCategory} />
     </>

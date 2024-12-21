@@ -17,6 +17,7 @@ import Loading from "../../Loading";
 import ReactDOM from "react-dom";
 import withReactContent from "sweetalert2-react-content";
 import { createRoot } from "react-dom/client";
+import { CheckCircleOutlined, CheckOutlined } from "@ant-design/icons";
 
 
 
@@ -25,6 +26,7 @@ interface Props {
   address: string;
   description: string;
   phoneNo: string;
+  registered: boolean;
 }
 interface TokenData {
   access_token: string;
@@ -61,6 +63,7 @@ const DescriptiveCenterDetails =  ({
   address,
   description,
   phoneNo,
+  registered
 }: Props) => {
   
   interface DoctorDetails {
@@ -178,12 +181,15 @@ const DescriptiveCenterDetails =  ({
           </div>
         
             <div className="bg-[#FF7300] text-[#FFFFFF] rounded-md p-2 w-fit flex items-center mt-4">
-            <button
+              
+            {registered && <><CheckOutlined /></> }
+
+            {!registered && <button
               className="text-[#FFFFFF]"
               onClick={handleRequest} // Pass the function as a callback
             >
               Request to join
-            </button>
+            </button>}
             </div>
           
         </div>
