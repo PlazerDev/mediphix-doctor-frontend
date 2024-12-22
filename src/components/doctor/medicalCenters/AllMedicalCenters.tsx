@@ -88,7 +88,7 @@ const AllMedicalCenters = () => {
  
 
   access_token = getToken();
-  console.log("Access token:", access_token);
+
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const AllMedicalCenters = () => {
     }
   };
   const queryClient = useQueryClient();
-  console.log("cache: ",queryClient.getQueryData(["medicalcenter", backendURL,config]));
+
 
   
 
@@ -110,7 +110,7 @@ const AllMedicalCenters = () => {
       queryFn: () => MedicalCenterService.getMedicalCenterData(backendURL, config),
       staleTime: 200000,
   });
-
+ 
 
 
   if (isLoading) {
@@ -148,7 +148,8 @@ const AllMedicalCenters = () => {
           <div key={index} >
             <AllCenterDetailCard appointmentCategory={[list.appointmentCategories]} 
             noOfDoctors={list.doctors.length} description={list.specialNotes} 
-            phoneNo={list.mobile} name={list.name} address={list.address} id={list._id} />
+            phoneNo={list.mobile} name={list.name} address={list.address} id={list._id}
+            profileImage={list.profileImage} />
           </div>
         ))}
       </div>    

@@ -20,6 +20,7 @@ interface Center {
   appointmentCategory: string[];
   description: string;
   phoneNo: string;
+  profileImage: string;
 }
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -93,9 +94,6 @@ if (isLoading) {
     </div>
   );
 }
-console.log(myMedicalCenters);
-
- 
 
   return (
     <>
@@ -133,7 +131,8 @@ console.log(myMedicalCenters);
             description={list.specialNotes} 
             phoneNo={list.mobile} 
             name={list.name}
-            address={list.address}/>
+            address={list.address}
+            profileImage={list.profileImage}/>
           </div>
         ))}
       </div>

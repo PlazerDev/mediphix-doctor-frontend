@@ -10,11 +10,12 @@ interface Center {
     appointmentCategory: string[];
     description: string;
     phoneNo: string;
+    profileImage: string;
   }
 
 const NotRegisteredCenter = () => {
   const location = useLocation();
-  const { name, address, appointmentCategory, description, phoneNo } = location.state as Center;
+  const { name, address, appointmentCategory, description, phoneNo ,profileImage} = location.state as Center;
 
   return (
     <>
@@ -45,6 +46,7 @@ const NotRegisteredCenter = () => {
       description={description} 
       phoneNo={phoneNo} 
       registered={false}
+      profileImage={profileImage}
        />
       <AvailableCatagorySection centerName={name} appointmentCategory={appointmentCategory}/>
       <NotJoined name={name}/>
