@@ -21,12 +21,14 @@ import { CheckCircleOutlined, CheckOutlined } from "@ant-design/icons";
 
 
 
+
 interface Props {
   name: string;
   address: string;
   description: string;
   phoneNo: string;
   registered: boolean;
+  profileImage: string;
 }
 interface TokenData {
   access_token: string;
@@ -63,7 +65,8 @@ const DescriptiveCenterDetails =  ({
   address,
   description,
   phoneNo,
-  registered
+  registered,
+  profileImage
 }: Props) => {
   
   interface DoctorDetails {
@@ -104,7 +107,7 @@ const DescriptiveCenterDetails =  ({
           }
         },
       });
-      console.log(id);
+    
       const response = await axios.post(
       
         `${backendURL}/doctor/setDoctorJoinRequest`, // Backend endpoint
@@ -137,6 +140,7 @@ const DescriptiveCenterDetails =  ({
   };
 
   return (
+    
     <>
       <div className="bg-[#ffffff] rounded-[16px] m-4 ">
         <div className="flex bg-[#FF7300] w-full h-24 rounded-t-[16px]">
@@ -151,7 +155,7 @@ const DescriptiveCenterDetails =  ({
             <div className="min-w-max">
               <div className="z-[500]">
                 <img
-                  src={centerImage}
+                  src={profileImage}
                   className="w-36 h-36 rounded-[16px] object-scale-down absolute top-[200px] z-2"
                 />
               </div>
