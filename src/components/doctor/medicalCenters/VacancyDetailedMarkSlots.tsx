@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import CardTitleAndValue from "../../CardTitleAndValue";
 import { ConfigProvider, Input } from "antd";
@@ -22,31 +23,30 @@ function generateTimeSlots(startTime: string, endTime: string) {
   return slots;
 }
 
-function VacancyDetailedMarkSlots() {
+function VacancyDetailedMarkSlots(props:any) {
+  const openSessions = props.openSessions;
+  console.log("openSessions: ", openSessions);
+
+  const ar = {} ;
+  openSessions.forEach(element => {
+    
+  });
+  
   const [formData, setFormData] = useState<
     { id: string; data: { time: string; noOfPatients: number }[] }[]
   >([]);
 
-  const vacancySlotDataObj = [
-    {
-      id: "1",
-      startDate: "2024-12-01",
-      endDate: "infinity",
-      startTime: "08:00",
-      endTime: "10:00",
-      repetition: ["FRI", "SAT"],
-      selectedDate: "",
-    },
-    {
-      id: "2",
-      startDate: "2024-11-20",
-      endDate: "2024-11-21",
-      startTime: "01:00",
-      endTime: "03:00",
-      repetition: [],
-      selectedDate: "2024-11-21",
-    },
-  ];
+  const vacancySlotDataObj = openSessions.map((item:any) => ({
+    id: item.sessionId.toString(), 
+    startDate: `${item.rangeStartTimestamp.year}-${String(item.rangeStartTimestamp.month).padStart(2, "0")}-${String(item.rangeStartTimestamp.day).padStart(2, "0")}`, // Format startDate
+    endDate: item.rangeEndTimestamp.year
+      ? `${item.rangeEndTimestamp.year}-${String(item.rangeEndTimestamp.month).padStart(2, "0")}-${String(item.rangeEndTimestamp.day).padStart(2, "0")}`
+      : "infinity", 
+    startTime: `${String(item.startTime.hour).padStart(2, "0")}:00`, 
+    endTime: `${String(item.endTime.hour).padStart(2, "0")}:00`, 
+    repetition: item.repetition.isRepeat ? item.repetition.days : [], 
+    selectedDate: "", 
+  }));
 
   const handleInputChange = (id: string, time: string, value: number) => {
     setFormData((prevFormData) => {
