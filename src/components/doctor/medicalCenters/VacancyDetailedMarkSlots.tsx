@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import CardTitleAndValue from "../../CardTitleAndValue";
 import { ConfigProvider, Input, Switch, message } from "antd";
@@ -53,12 +55,15 @@ function VacancyDetailedMarkSlots(props: any) {
       : "infinity",
     startTime: `${String(item.startTime.hour).padStart(2, "0")}:00`,
     endTime: `${String(item.endTime.hour).padStart(2, "0")}:00`,
+    isRepeat : item.repetition.isRepeat,
     repetition: item.repetition.isRepeat ? item.repetition.days : [],
-    selectedDate: "",
+    selectedDate: item.repetition.isRepeat? "" : `${item.repetition.noRepeatDateTimestamp.year}-${String(
+      item.repetition.noRepeatDateTimestamp.month
+    ).padStart(2, "0")}-${String(item.repetition.noRepeatDateTimestamp.day).padStart(2, "0")}`,
   }));
 
   const handleSwitchChange = (id: string, checked: boolean) => {
-    setSwitchStates((prevStates) => ({
+    setSwitchStates((prevStates:any) => ({
       ...prevStates,
       [id]: checked,
     }));
@@ -85,12 +90,42 @@ function VacancyDetailedMarkSlots(props: any) {
       }
     });
   };
+  const [validationErrors, setValidationErrors] = useState<
+  Record<string, string[]>
+  >({});
 
   const handleSubmit = async () => {
+    
+    const errors: Record<string, string[]> = {};
+    let isValid = true;
+
+    vacancySlotDataObj.forEach((data:any) => {
+      if (switchStates[data.id]) {
+        const slotData = formData.find((entry) => entry.id === data.id);
+        const timeSlots = generateTimeSlots(data.startTime, data.endTime);
+        const missingSlots = timeSlots.filter(
+          (slot) => !slotData?.data.some((entry) => entry.time === slot && entry.noOfPatients > 0 && entry.noOfPatients <= 20)
+        );
+
+        if (missingSlots.length > 0) {
+          isValid = false;
+          errors[data.id] = missingSlots;
+        }
+      }
+    });
+
+    setValidationErrors(errors);
+
+    if (!isValid) {
+      message.error("Invalid patient counts for enabled sessions.");
+      return;
+    }
+
+  
     try {
       const responseApplications = vacancySlotDataObj
-        .filter((data) => switchStates[data.id]) 
-        .map((data) => {
+        .filter((data:any) => switchStates[data.id]) 
+        .map((data:any) => {
           const slotData = formData.find((entry) => entry.id === data.id);
           const numberOfPatientsPerTimeSlot = slotData
             ? slotData.data.map((slot, index) => ({
@@ -101,7 +136,7 @@ function VacancyDetailedMarkSlots(props: any) {
           return {
             appliedVacancySessionId: parseInt(data.id),
             isAccepted: false,
-            expectedPaymentAmount: 2500.0, 
+            expectedPaymentAmount: 2500.0,
             numberOfPatientsPerTimeSlot,
           };
         });
@@ -109,26 +144,27 @@ function VacancyDetailedMarkSlots(props: any) {
       const payload = {
         responseId: 0,
         submittedTimestamp: new Date().toISOString(),
-        doctorId: "64d2f9b7a20c4b1f88d3e2a7", // Example doctor ID, replace with actual
+        doctorId: "", 
         noteToPatient,
         vacancyNoteToCenter,
         responseApplications,
         isCompletelyRejected: false,
       };
-      const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-      const access_token = TokenService.getToken();  
+      const backendURL = import.meta.env.VITE_BACKEND_URL;
+      const access_token = TokenService.getToken();
       const config: AxiosRequestConfig = {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${access_token}`
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
       };
 
-      console.log("Submitting payload:", payload );
-
-      // Example API call
-      const response = await axios.post("http://localhost:9000/doctor/respondToSessionVacancy", payload , config);
+      const response = await axios.post(
+        `${backendURL}/doctor/respondToSessionVacancy`,
+        payload,
+        config
+      );
       message.success("Request submitted successfully!");
     } catch (error) {
       console.error("Error submitting request:", error);
@@ -150,7 +186,7 @@ function VacancyDetailedMarkSlots(props: any) {
         <p className="font-bold">
           Mark your preferred vacancy slots & enter required details
         </p>
-        {vacancySlotDataObj.map((data) => {
+        {vacancySlotDataObj.map((data:any) => {
           const timeSlots = generateTimeSlots(data.startTime, data.endTime);
           const isEnabled = switchStates[data.id];
 
@@ -189,7 +225,7 @@ function VacancyDetailedMarkSlots(props: any) {
                   <CardTitleAndValue
                     title={"Repetition"}
                     value={
-                      data.repetition.length !== 0
+                      data.isRepeat
                         ? "Repeat weekly on " + data.repetition.join(", ")
                         : data.selectedDate
                     }
@@ -207,8 +243,8 @@ function VacancyDetailedMarkSlots(props: any) {
                         <p className="w-32">{slot}</p>
                         <Input
                           type="number"
-                          placeholder="Enter here"
-                          className="w-32"
+                          placeholder="Enter here (0-20)"
+                          className="w-40"
                           onChange={(e) =>
                             handleInputChange(
                               data.id,

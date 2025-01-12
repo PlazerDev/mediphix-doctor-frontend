@@ -28,15 +28,13 @@ export const useDataFetchService = (key: string ,endpoint : string) => {
     else{
       useQuery({
         queryKey: [key,  backendURL , config ],
-        staleTime: 20000,
         queryFn: async () => {
-          console.log("Fetching doctor data...");
           const response = await axios.get(`${backendURL}${endpoint}`, config);
           console.log("response: ", response.data);
           if (response.status === 200) {
-            return response.data // Return the fetched data (doctor's name)
+            return response.data 
           }
-          throw new Error('Failed to fetch doctor data');
+          throw new Error('Failed to fetch  data');
         }
       });
     }
