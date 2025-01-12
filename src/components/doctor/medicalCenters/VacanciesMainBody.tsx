@@ -49,8 +49,19 @@ function VacanciesMainBody() {
   };
 
   if (isLoading) {
-    return <Loading footer={false} />;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Loading footer={false} />
+      </div>
+    );
   }
+  
   if (isError) {
     return <h1>Error</h1>;
   }
