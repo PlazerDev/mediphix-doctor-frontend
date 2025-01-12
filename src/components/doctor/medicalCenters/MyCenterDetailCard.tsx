@@ -7,6 +7,7 @@ interface Center {
   appointmentCategory: string[];
   description: string;
   phoneNo: string;
+  profileImage: string;
 }
 
 const MyCenterdetailCard = ({
@@ -15,6 +16,7 @@ const MyCenterdetailCard = ({
   appointmentCategory,
   description,
   phoneNo,
+  profileImage
 }: Center) => {
   const createDisplayString = (items: string[], maxLength: number) => {
     let displayString = "";
@@ -54,6 +56,7 @@ const MyCenterdetailCard = ({
           appointmentCategory,
           description,
           phoneNo,
+          profileImage
         }}
       >
         <div className="bg-white rounded-2xl p-4 mx-1 mb-4">
@@ -61,7 +64,7 @@ const MyCenterdetailCard = ({
             <div className="flex items-center ml-8 mr-16 w-44">
               <img
                 className="w-36 h-36 rounded-2xl object-contain"
-                src={centerlogo}
+                src={profileImage}
                 alt="Center Logo"
               />
             </div>

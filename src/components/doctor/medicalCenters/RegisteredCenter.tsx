@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Breadcrumb } from "antd";
 import { useLocation } from "react-router-dom";
 import DescriptiveCenterDetails from "./DescriptiveCenterDetails";
@@ -9,11 +10,12 @@ interface Center {
   appointmentCategory: string[];
   description: string;
   phoneNo: string;
+  profileImage: string;
 }
 
 const RegisteredCenter = () => {
   const location = useLocation();
-  const { name, address, appointmentCategory, description, phoneNo } =
+  const { name, address, appointmentCategory, description, phoneNo,profileImage } =
     location.state as Center;
 
   return (
@@ -42,6 +44,8 @@ const RegisteredCenter = () => {
         address={address}
         description={description}
         phoneNo={phoneNo}
+        registered={true}
+        profileImage={profileImage}
       />
       <AvailableCatagorySection centerName={name} appointmentCategory={appointmentCategory} />
     </>

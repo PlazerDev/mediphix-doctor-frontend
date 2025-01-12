@@ -123,12 +123,6 @@ const DoctorHome = () => {
 
   access_token = getToken();
 
-  console.log("Access token: " + access_token);
-
-  // if (access_token == "") {
-  //
-  // }
-
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -136,94 +130,93 @@ const DoctorHome = () => {
     }
   };
 
-  console.log("before queryConfig: ", config);
 
 
-  const {
-    data: sessionDataFromQuery,
-    isError,
-    isPending,
-    error
-  } = useQuery({
-    queryKey: ["patient", { backendURL }, { config }],
-    staleTime: 20000,
-    queryFn: async () => {
-      console.log("Fetching patient data...");
 
-      try {
-        // Fetch data using axios, specifying the response type
-        const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetails?mobile=0769418929`, config);
+  // const {
+  //   data: sessionDataFromQuery,
+  //   isError,
+  //   isPending,
+  //   error
+  // } = useQuery({
+  //   queryKey: ["patient", { backendURL }, { config }],
+  //   staleTime: 20000,
+  //   queryFn: async () => {
+  //     // console.log("Fetching patient data...");
 
-        if (response.status === 200) {
-          console.log("response.data: ", response.data);
+  //     try {
+  //       // Fetch data using axios, specifying the response type
+  //       const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetailsByDoctorId `, config);
 
-          // Set session data in state
-          setSessionData(response.data);
+  //       if (response.status === 200) {
+  //         console.log("response.data: ", response.data);
 
-          // Return data from the function
-          return response.data;
-        }
-      } catch (error: any) {
-        // Handle different HTTP status errors
-        if (error.response) {
-          switch (error.response.status) {
-            case 401:
-              Swal.fire({
-                title: 'Error!',
-                text: 'Unauthorized, please login again (401).',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-              break;
-            case 403:
-              Swal.fire({
-                title: 'Error!',
-                text: 'You do not have access to the patient dashboard, please login via the correct portal (403).',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-              break;
-            case 404:
-              Swal.fire({
-                title: 'Error!',
-                text: 'Patient not found (404).',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-              break;
-            case 500:
-              Swal.fire({
-                title: 'Error!',
-                text: 'Internal server error (500). Please try again later.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-              break;
-            default:
-              Swal.fire({
-                title: 'Error!',
-                text: `Unexpected error occurred (status code: ${error.response.status}).`,
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-              break;
-          }
-        } else {
-          // General error handler for network or other unexpected errors
-          console.error('An unexpected error occurred:', error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'An unexpected error occurred. Please try again later.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        }
-      }
-    },
-  });
+  //         // Set session data in state
+  //         setSessionData(response.data);
 
-  console.log("after queryConfig: ", config);
-  console.log("sessionData: ", sessionData);
+  //         // Return data from the function
+  //         return response.data;
+  //       }
+  //     } catch (error: any) {
+  //       // Handle different HTTP status errors
+  //       if (error.response) {
+  //         switch (error.response.status) {
+  //           case 401:
+  //             Swal.fire({
+  //               title: 'Error!',
+  //               text: 'Unauthorized, please login again (401).',
+  //               icon: 'error',
+  //               confirmButtonText: 'OK',
+  //             });
+  //             break;
+  //           case 403:
+  //             Swal.fire({
+  //               title: 'Error!',
+  //               text: 'You do not have access to the patient dashboard, please login via the correct portal (403).',
+  //               icon: 'error',
+  //               confirmButtonText: 'OK',
+  //             });
+  //             break;
+  //           case 404:
+  //             Swal.fire({
+  //               title: 'Error!',
+  //               text: 'Patient not found (404).',
+  //               icon: 'error',
+  //               confirmButtonText: 'OK',
+  //             });
+  //             break;
+  //           case 500:
+  //             Swal.fire({
+  //               title: 'Error!',
+  //               text: 'Internal server error (500). Please try again later.',
+  //               icon: 'error',
+  //               confirmButtonText: 'OK',
+  //             });
+  //             break;
+  //           default:
+  //             Swal.fire({
+  //               title: 'Error!',
+  //               text: `Unexpected error occurred (status code: ${error.response.status}).`,
+  //               icon: 'error',
+  //               confirmButtonText: 'OK',
+  //             });
+  //             break;
+  //         }
+  //       } else {
+  //         // General error handler for network or other unexpected errors
+  //         console.error('An unexpected error occurred:', error);
+  //         Swal.fire({
+  //           title: 'Error!',
+  //           text: 'An unexpected error occurred. Please try again later.',
+  //           icon: 'error',
+  //           confirmButtonText: 'OK',
+  //         });
+  //       }
+  //     }
+  //   },
+  // });
+
+  // console.log("sessionData: ", sessionData);
 
 
   const wrapperStyle: React.CSSProperties = {
@@ -237,7 +230,7 @@ const DoctorHome = () => {
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
-          Good Evening , Dr. V. Visal Alwis
+          {<GetDoctorName2 config={config} />}
           {/* Good Evening , Dr. V. {<GetDoctorName config={config} /> } */}
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
@@ -286,7 +279,7 @@ const DoctorHome = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center bg-contain">
-              {isPending ? <Loading footer={false} /> :
+              {/* {isPending ? <Loading footer={false} /> :
                 <OngoingSessionData
                   data={sessionData.filter(session => {
                     if (session.sessionStatus === "ONGOING") {
@@ -294,7 +287,7 @@ const DoctorHome = () => {
                     }
                   })}
                 />
-              }
+              } */}
             </div>
 
           </div>
@@ -323,7 +316,7 @@ const DoctorHome = () => {
                 <div className="p-6 text-center">
                   <p>Sessions Yesterday</p>
                   <h1 className="text-center text-[28px] ">
-                    {sessionData.filter(session => {
+                    {/* {sessionData.filter(session => {
                       const today = new Date();
                       const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
                       if (today.getFullYear() === endSessionDate.getFullYear() &&
@@ -333,7 +326,7 @@ const DoctorHome = () => {
                       } else {
                         return false;
                       }
-                    }).length}
+                    }).length} */}
                   </h1>
                 </div>
               </div>
@@ -347,7 +340,7 @@ const DoctorHome = () => {
                 <div className="p-6 text-center">
                   <p>Sessions This Week</p>
                   <h1 className="text-center text-[28px] ">
-                    {sessionData.filter(session => {
+                    {/* {sessionData.filter(session => {
                       const today = new Date();
                       const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
 
@@ -356,7 +349,7 @@ const DoctorHome = () => {
                       } else {
                         return false;
                       }
-                    }).length}
+                    }).length} */}
                   </h1>
                 </div>
               </div>
@@ -393,26 +386,53 @@ const DoctorHome = () => {
 
 
 function GetDoctorName({ config }: { config: any }) {
-  const { data: doctorName, isError, isPending, error } = useQuery({
+  const { data: doctorDetails, isError, isPending, error } = useQuery({
     queryKey: ["doctorName", { backendURL }, { config }],
     staleTime: 20000,
     queryFn: async () => {
       console.log("Fetching doctor data...");
-      const response = await axios.get(`${backendURL}/doctor/getDoctorName?mobile=0769418929`, config);
+      const response = await axios.get(`${backendURL}/doctor/getDoctorDetails`, config);
       console.log("response: ", response);
       if (response.status === 200) {
         return response.data; // Return the fetched data (doctor's name)
       }
       throw new Error('Failed to fetch doctor data');
     }
+    
   });
-
+  console.log("doctorDetails: ", doctorDetails);
   if (isPending) return <Loading footer={false} />;
   if (isError) return <div>An error has occurred: {error?.message}</div>;
 
   return (
     <div>
-      Good Evening, Dr. {doctorName}
+      Good Evening, Dr. {doctorDetails.name}
+    </div>
+  );
+}
+
+function GetDoctorName2({ config }: { config: any }) {
+  const { data: doctorDetails, isError, isPending, error } = useQuery({
+    queryKey: ["doctorName", { backendURL }, { config }],
+    staleTime: 20000,
+    queryFn: async () => {
+      console.log("Fetching doctor data...");
+      const response = await axios.get(`${backendURL}/doctor/getDoctorDetails2`, config);
+      console.log("response: ", response);
+      if (response.status === 200) {
+        return response.data; // Return the fetched data (doctor's name)
+      }
+      throw new Error('Failed to fetch doctor data');
+    }
+    
+  });
+  console.log("doctorDetails: ", doctorDetails);
+  if (isPending) return <Loading footer={false} />;
+  if (isError) return <div>An error has occurred: {error?.message}</div>;
+
+  return (
+    <div>
+      Good Evening, Dr. {doctorDetails.name}
     </div>
   );
 }

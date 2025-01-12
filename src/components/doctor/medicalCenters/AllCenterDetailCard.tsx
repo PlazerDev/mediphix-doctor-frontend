@@ -8,6 +8,8 @@ interface Center {
   noOfDoctors: number;
   description: string;
   phoneNo: string;
+  id:string;
+  profileImage: string;
 }
 
 
@@ -18,6 +20,8 @@ const AllCenterDetailCard = ({
     noOfDoctors,
     description,
     phoneNo,
+    id,
+    profileImage,
   }: Center) => {
   
     const createDisplayString = (items: string[], maxLength: number) => {
@@ -50,7 +54,7 @@ const AllCenterDetailCard = ({
         <>
           <Link
             to={{
-              pathname: "/doctor/medicalcenters/allmedicalcenters/" + name,
+              pathname: "/doctor/medicalcenters/allmedicalcenters/" + id,
             }}
             state={{
               name,
@@ -59,6 +63,7 @@ const AllCenterDetailCard = ({
               noOfDoctors,
               description,
               phoneNo,
+              profileImage,
             }}
           >
             <div className="bg-white rounded-2xl p-4 mx-1 mb-4">
@@ -66,7 +71,7 @@ const AllCenterDetailCard = ({
                 <div className="flex items-center ml-8 mr-16 w-44">
                   <img
                     className="w-36 h-36 rounded-2xl object-contain"
-                    src={centerlogo}
+                    src={profileImage}
                     alt="Center Logo"
                   />
                 </div>

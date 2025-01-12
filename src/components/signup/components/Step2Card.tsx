@@ -21,6 +21,7 @@ function Step2Card({ nextBtnHandler }: Props) {
   };
 
   const password = watch("password"); // Watch password field for confirmation validation
+  const email = watch("email");
 
   return (
     <div className="py-4">
@@ -114,11 +115,11 @@ function Step2Card({ nextBtnHandler }: Props) {
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <p>Enter your doctor ID</p>
-            <IDUpload />
+            <IDUpload email={email || ""}/>
           </div>
           <div className="flex-2">
             <p>Enter a professional photo of youself</p>
-            <DPUpload />
+            <DPUpload email={email || ""}/>
           </div>
         </div>
         {/* Submit Button */}

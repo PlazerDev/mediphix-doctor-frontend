@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import ErrorService from "./ErrorService";
 
 interface MedicalCenter {
+    profileImage: any;
     _id: string,
     name: string,
     address: string,

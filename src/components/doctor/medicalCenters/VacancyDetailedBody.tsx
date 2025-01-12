@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import CardTitleAndValue from "../../CardTitleAndValue";
 import VacancyDetailedMarkSlots from "./VacancyDetailedMarkSlots";
 
-function VacancyDetailedBody() {
+function VacancyDetailedBody(props: any) {
   const vacancyDataObj = {
-    aptCategories: ["OPD", "DENTAL"],
-    contactNumber: "071-3072929",
-    note: "Contact us for any clarifications.",
+    aptCategories: props.aptCategories,
+    contactNumber: props.mobile,
+    note: props.vacancyNoteToDoctors,
   };
   return (
     <div>
@@ -24,10 +25,12 @@ function VacancyDetailedBody() {
         </div>
         <CardTitleAndValue
           title="Note from the medical center"
-          value={vacancyDataObj.contactNumber}
+          value={vacancyDataObj.note}
         />
       </div>
-      <VacancyDetailedMarkSlots />
+      <VacancyDetailedMarkSlots 
+        openSessions = {props.openSessions}
+      />
     </div>
   );
 }
