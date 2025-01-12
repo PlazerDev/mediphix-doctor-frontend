@@ -1,8 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Breadcrumb } from "antd";
 
 import VacancyDetailedBody from "./VacancyDetailedBody";
+import { useLocation } from "react-router-dom";
 
 function VacanciesDetailed() {
+  const location = useLocation();
+  const openSessions = location.state?.openSessions;
+  const mobile = location.state?.mobile;
+  const vacancyNoteToDoctors = location.state?.vacancyNoteToDoctors;
+  const aptCategories = location.state?.aptCategories;
+  console.log("openSessions:sssss ", openSessions);
+ 
+
   return (
     <div>
       <div>
@@ -37,7 +47,12 @@ function VacanciesDetailed() {
           ]}
         />
       </div>
-      <VacancyDetailedBody />
+      <VacancyDetailedBody
+       openSessions = {openSessions}
+       mobile = {mobile}
+       vacancyNoteToDoctors = {vacancyNoteToDoctors}
+       aptCategories = {aptCategories}
+       />
     </div>
   );
 }
