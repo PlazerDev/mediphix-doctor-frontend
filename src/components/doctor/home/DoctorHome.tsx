@@ -18,9 +18,11 @@ import { useState } from "react";
 import Loading from "../../Loading";
 import { SessionData } from "@asgardeo/auth-react";
 import DoctorHomeCalender from "./DoctorHomeCalender";
-
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>["mode"]) => {
-  console.log(value.format("YYYY-MM-DD"), mode);
+
 }
 // Function to get the week number of the year
 function getWeekNumber(date: Date): number {
@@ -50,30 +52,6 @@ function getWeekNumber(date: Date): number {
   return 1 + Math.ceil((firstThursday - tempDate.valueOf()) / 604800000); // 604800000 = number of milliseconds in a week
 }
 
-interface Session {
-  sessionId: string;
-  doctorName: string;
-  doctorMobile: string;
-  medicalcenterId: string;
-  medicalcenterName: string;
-  medicalcenterMobile: string;
-  doctorNote: string;
-  medicalCenterNote: string;
-  timeSlots: {
-    endTime: any;
-    patientCount: number;
-    startTime: any;
-  };
-  category: string;
-  location: string;
-  payment: any;
-  sessionDate: string;
-  sessionStatus: string;
-}
-
-// State initialization using an array of Session
-
-
 
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -87,7 +65,7 @@ interface TokenData {
 
 const DoctorHome = () => {
   const { token } = theme.useToken();
-  const [sessionData, setSessionData] = useState<Session[]>([]);
+  const [sessionData, setSessionData] = useState({});
   let access_token: string = "";
 
   function getToken(): string {
@@ -122,6 +100,9 @@ const DoctorHome = () => {
   }
 
   access_token = getToken();
+  // console.log("access_token: ", access_token);
+
+
 
   const config: AxiosRequestConfig = {
     headers: {
@@ -130,108 +111,76 @@ const DoctorHome = () => {
     }
   };
 
-
-
-
-  // const {
-  //   data: sessionDataFromQuery,
-  //   isError,
-  //   isPending,
-  //   error
-  // } = useQuery({
-  //   queryKey: ["patient", { backendURL }, { config }],
-  //   staleTime: 20000,
-  //   queryFn: async () => {
-  //     // console.log("Fetching patient data...");
-
-  //     try {
-  //       // Fetch data using axios, specifying the response type
-  //       const response = await axios.get<Session[]>(`${backendURL}/doctor/getSessionDetailsByDoctorId `, config);
-
-  //       if (response.status === 200) {
-  //         console.log("response.data: ", response.data);
-
-  //         // Set session data in state
-  //         setSessionData(response.data);
-
-  //         // Return data from the function
-  //         return response.data;
-  //       }
-  //     } catch (error: any) {
-  //       // Handle different HTTP status errors
-  //       if (error.response) {
-  //         switch (error.response.status) {
-  //           case 401:
-  //             Swal.fire({
-  //               title: 'Error!',
-  //               text: 'Unauthorized, please login again (401).',
-  //               icon: 'error',
-  //               confirmButtonText: 'OK',
-  //             });
-  //             break;
-  //           case 403:
-  //             Swal.fire({
-  //               title: 'Error!',
-  //               text: 'You do not have access to the patient dashboard, please login via the correct portal (403).',
-  //               icon: 'error',
-  //               confirmButtonText: 'OK',
-  //             });
-  //             break;
-  //           case 404:
-  //             Swal.fire({
-  //               title: 'Error!',
-  //               text: 'Patient not found (404).',
-  //               icon: 'error',
-  //               confirmButtonText: 'OK',
-  //             });
-  //             break;
-  //           case 500:
-  //             Swal.fire({
-  //               title: 'Error!',
-  //               text: 'Internal server error (500). Please try again later.',
-  //               icon: 'error',
-  //               confirmButtonText: 'OK',
-  //             });
-  //             break;
-  //           default:
-  //             Swal.fire({
-  //               title: 'Error!',
-  //               text: `Unexpected error occurred (status code: ${error.response.status}).`,
-  //               icon: 'error',
-  //               confirmButtonText: 'OK',
-  //             });
-  //             break;
-  //         }
-  //       } else {
-  //         // General error handler for network or other unexpected errors
-  //         console.error('An unexpected error occurred:', error);
-  //         Swal.fire({
-  //           title: 'Error!',
-  //           text: 'An unexpected error occurred. Please try again later.',
-  //           icon: 'error',
-  //           confirmButtonText: 'OK',
-  //         });
-  //       }
-  //     }
-  //   },
-  // });
-
-  // console.log("sessionData: ", sessionData);
-
-
   const wrapperStyle: React.CSSProperties = {
     width: "100%",
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
   };
+    const { data: sessionDetails, isError, isPending, error } = useQuery({
+      queryKey: ["sessionDetails", { backendURL }, { config }],
+      staleTime: 20000,
+      queryFn: async () => {
+
+        const response = await axios.get(`${backendURL}/doctor/getSessionDetailsForDoctorHome`, config);
+    
+        if (response.status === 200) {
+          return response.data; 
+        }
+        throw new Error('Failed to fetch doctor data');
+      }
+      
+    });
+
+    console.log("sessionDetails: ", sessionDetails);
+
+
+
+// Sample Response Data
+
+
+function getSessionCounts(sessions: any[]) {
+  const now = dayjs();
+
+  // Calculate date ranges
+  const yesterday = now.subtract(1, "day").startOf("day");
+  const startOfWeek = now.startOf("week");
+  const endOfWeek = now.endOf("week");
+  const startOfMonth = now.startOf("month");
+
+  // Filter Sessions
+  const sessionsYesterday = sessions.filter((session) =>
+    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(yesterday, "day")
+  );
+
+  
+
+  const sessionsThisWeek = sessions.filter((session) =>
+    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isBetween(startOfWeek, endOfWeek, "day", "[]")
+  );
+
+  const sessionsThisMonth = sessions.filter((session) =>
+    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(now, "month")
+  );
+
+  // Return Counts
+  return {
+    yesterday: sessionsYesterday.length,
+    thisWeek: sessionsThisWeek.length,
+    thisMonth: sessionsThisMonth.length,
+  };
+}
+
+// console.log(getSessionCounts(response));
 
 
   return (
+  
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
-          {<GetDoctorName2 config={config} />}
-          {/* Good Evening , Dr. V. {<GetDoctorName config={config} /> } */}
+
+          {<GetDoctorName config={config} />}
+
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
       </div>
@@ -256,10 +205,10 @@ const DoctorHome = () => {
                 {/* <DoctorHomeCalender data={sessionData} /> */}
               </div>
             </div>
-            {sessionData.map((session, index) => (
+            {/* {sessionData.map((session, index) => (
               <DoctorTimeSlots key={session.sessionId} data={session} />
 
-            ))}
+            ))} */}
 
           </div>
         </div>
@@ -279,14 +228,10 @@ const DoctorHome = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center bg-contain">
-              {/* {isPending ? <Loading footer={false} /> :
+              {/* {sessionDetails ? 
                 <OngoingSessionData
-                  data={sessionData.filter(session => {
-                    if (session.sessionStatus === "ONGOING") {
-                      return true;
-                    }
-                  })}
-                />
+                  data={formatSessionData(sessionDetails)}
+                /> : null
               } */}
             </div>
 
@@ -316,17 +261,9 @@ const DoctorHome = () => {
                 <div className="p-6 text-center">
                   <p>Sessions Yesterday</p>
                   <h1 className="text-center text-[28px] ">
-                    {/* {sessionData.filter(session => {
-                      const today = new Date();
-                      const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
-                      if (today.getFullYear() === endSessionDate.getFullYear() &&
-                        today.getMonth() === endSessionDate.getMonth() &&
-                        today.getDate() === endSessionDate.getDate()) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    }).length} */}
+
+                  {sessionDetails ? getSessionCounts(sessionDetails).yesterday : null}
+
                   </h1>
                 </div>
               </div>
@@ -340,16 +277,9 @@ const DoctorHome = () => {
                 <div className="p-6 text-center">
                   <p>Sessions This Week</p>
                   <h1 className="text-center text-[28px] ">
-                    {/* {sessionData.filter(session => {
-                      const today = new Date();
-                      const endSessionDate = new Date(session.timeSlots.endTime.year, session.timeSlots.endTime.month, session.timeSlots.endTime.day);
 
-                      if (getWeekNumber(today) === getWeekNumber(endSessionDate)) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    }).length} */}
+                  {sessionDetails ? getSessionCounts(sessionDetails).thisWeek : null}
+
                   </h1>
                 </div>
               </div>
@@ -359,18 +289,7 @@ const DoctorHome = () => {
                 <div className="p-6 text-center">
                   <p>Sessions This Month</p>
                   <h1 className="text-center text-[28px] ">
-                    {sessionData.filter(session => {
-                      const today = new Date();
-                      const startSessionDate = new Date(session.timeSlots.startTime.year,
-                        (session.timeSlots.startTime.month) - 1,
-                        session.timeSlots.startTime.day);
-                      if (today.getFullYear() === startSessionDate.getFullYear() &&
-                        today.getMonth() === startSessionDate.getMonth()) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    }).length}
+                  {sessionDetails ? getSessionCounts(sessionDetails).thisMonth : null}
                   </h1>
                 </div>
               </div>
@@ -390,17 +309,18 @@ function GetDoctorName({ config }: { config: any }) {
     queryKey: ["doctorName", { backendURL }, { config }],
     staleTime: 20000,
     queryFn: async () => {
-      console.log("Fetching doctor data...");
+ 
       const response = await axios.get(`${backendURL}/doctor/getDoctorDetails`, config);
-      console.log("response: ", response);
+  
       if (response.status === 200) {
+        // setSessionData(response.data);
         return response.data; // Return the fetched data (doctor's name)
       }
       throw new Error('Failed to fetch doctor data');
     }
     
   });
-  console.log("doctorDetails: ", doctorDetails);
+
   if (isPending) return <Loading footer={false} />;
   if (isError) return <div>An error has occurred: {error?.message}</div>;
 
@@ -411,33 +331,32 @@ function GetDoctorName({ config }: { config: any }) {
   );
 }
 
-function GetDoctorName2({ config }: { config: any }) {
-  const { data: doctorDetails, isError, isPending, error } = useQuery({
-    queryKey: ["doctorName", { backendURL }, { config }],
-    staleTime: 20000,
-    queryFn: async () => {
-      console.log("Fetching doctor data...");
-      const response = await axios.get(`${backendURL}/doctor/getDoctorDetails2`, config);
-      console.log("response: ", response);
-      if (response.status === 200) {
-        return response.data; // Return the fetched data (doctor's name)
-      }
-      throw new Error('Failed to fetch doctor data');
-    }
-    
-  });
-  console.log("doctorDetails: ", doctorDetails);
-  if (isPending) return <Loading footer={false} />;
-  if (isError) return <div>An error has occurred: {error?.message}</div>;
 
-  return (
-    <div>
-      Good Evening, Dr. {doctorDetails.name}
-    </div>
-  );
+function formatSessionData(response: any[]) {
+  return response.map((session) => ({
+    sessionId: session._id,
+    doctorName: "Dr. " + session.doctorId, // You may want to fetch the actual doctor data
+    doctorMobile: session.doctorId, // Replace with actual doctor mobile if available
+    medicalcenterId: session.medicalCenterId,
+    medicalcenterName: session.medicalcenterName,
+    medicalcenterMobile: session.medicalcenterMobile,
+    doctorNote: session.noteFromDoctor,
+    medicalCenterNote: session.noteFromCenter,
+    timeSlots: session.timeSlots.map((slot: any) => ({
+      startTime: slot.startTime,
+      endTime: slot.status === 'STARTED' ? slot.startTime : '', // Adjust endTime logic as needed
+      patientCount: slot.queue.appointments.length,
+    })),
+    category: session.aptCategories.join(', '), // Concatenate categories if there are multiple
+    location: session.hallNumber,
+    payment: session.payment,
+    sessionDate: `${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`,
+    sessionStatus: session.overallSessionStatus,
+  }));
 }
 
-    
 
 
 export default DoctorHome;
+
+
