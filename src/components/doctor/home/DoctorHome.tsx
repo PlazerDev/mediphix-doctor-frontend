@@ -104,7 +104,6 @@ const DoctorHome = () => {
 
 
 
-
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -135,6 +134,7 @@ const DoctorHome = () => {
     console.log("sessionDetails: ", sessionDetails);
 
 
+
 // Sample Response Data
 
 
@@ -151,6 +151,8 @@ function getSessionCounts(sessions: any[]) {
   const sessionsYesterday = sessions.filter((session) =>
     dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(yesterday, "day")
   );
+
+  
 
   const sessionsThisWeek = sessions.filter((session) =>
     dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isBetween(startOfWeek, endOfWeek, "day", "[]")
@@ -176,7 +178,9 @@ function getSessionCounts(sessions: any[]) {
     <>
       <div className="mt-2 ml-4">
         <p className="font-Roboto font-[700] text-xl text-[#151515]">
+
           {<GetDoctorName config={config} />}
+
         </p>
         <p className="mb-6">We hope you're having a great day.</p>
       </div>
@@ -257,7 +261,9 @@ function getSessionCounts(sessions: any[]) {
                 <div className="p-6 text-center">
                   <p>Sessions Yesterday</p>
                   <h1 className="text-center text-[28px] ">
+
                   {sessionDetails ? getSessionCounts(sessionDetails).yesterday : null}
+
                   </h1>
                 </div>
               </div>
@@ -271,7 +277,9 @@ function getSessionCounts(sessions: any[]) {
                 <div className="p-6 text-center">
                   <p>Sessions This Week</p>
                   <h1 className="text-center text-[28px] ">
+
                   {sessionDetails ? getSessionCounts(sessionDetails).thisWeek : null}
+
                   </h1>
                 </div>
               </div>
@@ -323,6 +331,7 @@ function GetDoctorName({ config }: { config: any }) {
   );
 }
 
+
 function formatSessionData(response: any[]) {
   return response.map((session) => ({
     sessionId: session._id,
@@ -345,7 +354,6 @@ function formatSessionData(response: any[]) {
     sessionStatus: session.overallSessionStatus,
   }));
 }
-
 
 
 
