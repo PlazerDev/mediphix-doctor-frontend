@@ -27,6 +27,7 @@ function generateTimeSlots(startTime: string, endTime: string) {
 }
 
 function VacancyDetailedMarkSlots(props: any) {
+  const sessionVacancyId = props._id;
   const openSessions = props.openSessions;
 
   const [formData, setFormData] = useState<
@@ -134,7 +135,7 @@ function VacancyDetailedMarkSlots(props: any) {
               }))
             : [];
           return {
-            appliedVacancySessionId: parseInt(data.id),
+            appliedOpenSessionId: parseInt(data.id),
             isAccepted: false,
             expectedPaymentAmount: 2500.0,
             numberOfPatientsPerTimeSlot,
@@ -145,6 +146,7 @@ function VacancyDetailedMarkSlots(props: any) {
         responseId: 0,
         submittedTimestamp: new Date().toISOString(),
         doctorId: "", 
+        sessionVacancyId,
         noteToPatient,
         vacancyNoteToCenter,
         responseApplications,

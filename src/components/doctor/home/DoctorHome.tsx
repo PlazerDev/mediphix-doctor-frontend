@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Footer from "./../../Footer";
-import DoctorTimeSlots from "./DoctorTimeSlots";
+import DoctorTimeSlots, { Session } from "./DoctorTimeSlots";
 //import NoOngoingSession from "./NoOngoingSession";
 import OngoingSessionData from "./OngoingSessionData";
 import { Calendar, theme } from "antd";
@@ -65,7 +65,7 @@ interface TokenData {
 
 const DoctorHome = () => {
   const { token } = theme.useToken();
-  const [sessionData, setSessionData] = useState({});
+  const [sessionData, setSessionData] = useState<Session[]>([]);
   let access_token: string = "";
 
   function getToken(): string {
@@ -140,6 +140,7 @@ const DoctorHome = () => {
 
 function getSessionCounts(sessions: any[]) {
   const now = dayjs();
+  console.log("now: ", now);
 
   // Calculate date ranges
   const yesterday = now.subtract(1, "day").startOf("day");
@@ -147,26 +148,27 @@ function getSessionCounts(sessions: any[]) {
   const endOfWeek = now.endOf("week");
   const startOfMonth = now.startOf("month");
 
-  // Filter Sessions
-  const sessionsYesterday = sessions.filter((session) =>
-    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(yesterday, "day")
-  );
+  // // Filter Sessions
+  // const sessionsYesterday = sessions.filter((session) =>
+  //   dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(yesterday, "day")
+  // );
 
   
 
-  const sessionsThisWeek = sessions.filter((session) =>
-    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isBetween(startOfWeek, endOfWeek, "day", "[]")
-  );
+  // const sessionsThisWeek = sessions.filter((session) =>
+  //   dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isBetween(startOfWeek, endOfWeek, "day", "[]")
+  // );
 
-  const sessionsThisMonth = sessions.filter((session) =>
-    dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(now, "month")
-  );
+  // const sessionsThisMonth = sessions.filter((session) =>
+  //   dayjs(`${session.startTimestamp.year}-${session.startTimestamp.month}-${session.startTimestamp.day}`).isSame(now, "month")
+  // );
 
-  // Return Counts
+  // // Return Counts
   return {
-    yesterday: sessionsYesterday.length,
-    thisWeek: sessionsThisWeek.length,
-    thisMonth: sessionsThisMonth.length,
+  //   yesterday: sessionsYesterday.length,
+  //   thisWeek: sessionsThisWeek.length,
+  //   thisMonth: sessionsThisMonth.length,
+    thisMonth: 1,
   };
 }
 
@@ -205,10 +207,10 @@ function getSessionCounts(sessions: any[]) {
                 {/* <DoctorHomeCalender data={sessionData} /> */}
               </div>
             </div>
-            {/* {sessionData.map((session, index) => (
+            {sessionData.map((session, index) => (
               <DoctorTimeSlots key={session.sessionId} data={session} />
 
-            ))} */}
+            ))}
 
           </div>
         </div>
@@ -262,7 +264,7 @@ function getSessionCounts(sessions: any[]) {
                   <p>Sessions Yesterday</p>
                   <h1 className="text-center text-[28px] ">
 
-                  {sessionDetails ? getSessionCounts(sessionDetails).yesterday : null}
+                  {/* {sessionDetails ? getSessionCounts(sessionDetails).yesterday : null} */}
 
                   </h1>
                 </div>
@@ -278,7 +280,7 @@ function getSessionCounts(sessions: any[]) {
                   <p>Sessions This Week</p>
                   <h1 className="text-center text-[28px] ">
 
-                  {sessionDetails ? getSessionCounts(sessionDetails).thisWeek : null}
+                  {/* {sessionDetails ? getSessionCounts(sessionDetails).thisWeek : null} */}
 
                   </h1>
                 </div>

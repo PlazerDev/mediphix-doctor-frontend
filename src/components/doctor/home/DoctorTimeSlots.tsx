@@ -18,7 +18,7 @@ function formatSriLankanPhoneNumber(phoneNumber: string): string {
 interface DoctorTimeSlotsProps {
   data: Session;
 }
-interface Session {
+export interface Session {
   sessionId: string;
   doctorName: string;
   doctorMobile: string;
