@@ -5,7 +5,8 @@ import SessionList from "./SessionList";
 import { useEffect, useState } from "react";
 import PatientRecord from "./PatientRecord";
 import ReviewRecordMessage from "./ReviewRecordMessage";
-
+import axios, { AxiosRequestConfig } from "axios";
+import TokenService from "../../../../services/TokenService";
 
 const OngoingSession = () => {
   const [formData, setFormData] = useState(null);
@@ -51,7 +52,13 @@ const OngoingSession = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${timezoneSign}${offsetHours}:${offsetMinutes}`;
 }
 
-
+  const access_token:string = TokenService.getToken();
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    }
+  };
 
   const mapAppointments = (appointments:[], queueOperations) => {
     return appointments.map((appointment, index) => {
@@ -75,10 +82,10 @@ const OngoingSession = () => {
 
   const fetchPatientDetails = async (currentRefNo: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:9000/mca/getPatientDetailsForOngoingSessions/${currentRefNo}`
+      const response = await axios.get(
+        `http://localhost:9000/mca/getPatientDetailsForOngoingSessions/${currentRefNo}`,config
       );
-      const patientDetails = await response.json();
+      const patientDetails = response.data;
       console.log("Fetched Patient Details:", patientDetails);
 
       // // Update patient and appointment data
@@ -109,8 +116,8 @@ const OngoingSession = () => {
   useEffect(() => {
     const fetchQueueData = async () => {
       try {
-        const response = await fetch('http://localhost:9000/mca/getOngoingSessionQueue');
-        const data = await response.json();
+        const response = await axios.get('http://localhost:9000/mca/getOngoingSessionQueue',config);
+        const data = response.data;
         console.log("Fetched Queue Data:", data);
         const startedTimeSot = data[0].timeSlots.find( (timeSlot: any) => timeSlot.status === "STARTED");
         const appointmentsNumbers  = startedTimeSot.queue.appointments;
