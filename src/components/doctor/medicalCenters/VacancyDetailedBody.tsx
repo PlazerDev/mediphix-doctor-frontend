@@ -4,6 +4,7 @@ import CardTitleAndValue from "../../CardTitleAndValue";
 import VacancyDetailedMarkSlots from "./VacancyDetailedMarkSlots";
 
 function VacancyDetailedBody(props: any) {
+  console.log("helooooooooo", props);
   const vacancyDataObj = {
     aptCategories: props.aptCategories,
     contactNumber: props.mobile,
@@ -28,8 +29,9 @@ function VacancyDetailedBody(props: any) {
           value={vacancyDataObj.note}
         />
       </div>
-      <VacancyDetailedMarkSlots 
-        openSessions = {props.openSessions}
+      <VacancyDetailedMarkSlots
+        openSessions={props.openSessions}
+        vacacncyId={props.vacacncyId}
       />
     </div>
   );

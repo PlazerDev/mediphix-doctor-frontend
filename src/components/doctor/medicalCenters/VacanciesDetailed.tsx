@@ -2,7 +2,7 @@
 import { Breadcrumb } from "antd";
 
 import VacancyDetailedBody from "./VacancyDetailedBody";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 function VacanciesDetailed() {
   const location = useLocation();
@@ -11,7 +11,10 @@ function VacanciesDetailed() {
   const vacancyNoteToDoctors = location.state?.vacancyNoteToDoctors;
   const aptCategories = location.state?.aptCategories;
   console.log("openSessions:sssss ", openSessions);
- 
+
+  const { id } = useParams<{
+    id: string;
+  }>();
 
   return (
     <div>
@@ -48,11 +51,12 @@ function VacanciesDetailed() {
         />
       </div>
       <VacancyDetailedBody
-       openSessions = {openSessions}
-       mobile = {mobile}
-       vacancyNoteToDoctors = {vacancyNoteToDoctors}
-       aptCategories = {aptCategories}
-       />
+        vacacncyId={id}
+        openSessions={openSessions}
+        mobile={mobile}
+        vacancyNoteToDoctors={vacancyNoteToDoctors}
+        aptCategories={aptCategories}
+      />
     </div>
   );
 }
