@@ -75,7 +75,7 @@ const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}:
           Patient Consultation Data Entry
         </div>
         <div className="p-4">
-          <PatentRecordEntryForm onSubmit={onSubmit} />
+          <PatentRecordEntryForm onSubmit={onSubmit} appoinmentNumber={appointmentData.refNumber} />
         </div>
       </div>
     </>

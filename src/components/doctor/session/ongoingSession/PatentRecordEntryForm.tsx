@@ -10,7 +10,7 @@ import MedicationsEntry from "./MedicationsEntry";
 const { TextArea } = Input;
 
 const PatientRecordEntryForm = ({
-  onSubmit,
+  onSubmit,appoinmentNumber
 }: {
   onSubmit: (data: any) => void;
 }) => {
@@ -52,6 +52,8 @@ const PatientRecordEntryForm = ({
       labReports: showLabReports ? labReports : [],
     });
   };
+  
+  
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-8">
@@ -99,7 +101,7 @@ const PatientRecordEntryForm = ({
         onAddMedication={handleMedicationsUpdate}
       />
 
-      {/* Procedures */}
+      Procedures
       <ProceduresEntry
         control={control}
         procedures={procedures}

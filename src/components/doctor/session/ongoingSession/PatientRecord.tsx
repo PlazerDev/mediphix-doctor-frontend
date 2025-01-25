@@ -7,9 +7,32 @@ interface RecordProps {
   formData: any;
   patientData: any;
   appointmentData: any;
+  currentRefNo: string;
 }
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
+function getCurrentDateTimeInFormat(): string {
+  const date = new Date();
+
+  // Format the date components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const milliseconds = String(date.getMilliseconds()).padStart(2, '0');
+
+  // Get timezone offset in hours and minutes
+  const timezoneOffset = -date.getTimezoneOffset();
+  const offsetHours = String(Math.floor(timezoneOffset / 60)).padStart(2, '0');
+  const offsetMinutes = String(Math.abs(timezoneOffset % 60)).padStart(2, '0');
+  const timezoneSign = timezoneOffset >= 0 ? '+' : '-';
+
+  // Combine into the desired format
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${timezoneSign}${offsetHours}:${offsetMinutes}`;
+}
+
 
 interface TokenData {
   access_token: string;
@@ -46,6 +69,8 @@ const PatientRecord = ({
   formData,
   patientData,
   appointmentData,
+  currentRefNo,
+  startTimeStamp,
 }: RecordProps) => {
   const access_token = getToken();
 
@@ -58,11 +83,36 @@ const PatientRecord = ({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(
-        `${backendURL}/doctor/submitPatientRecord`,
-        { formData, patientData, appointmentData },
+      console.log("submit in muration",appointmentData);
+      const medicalRecord = {
+        aptNumber: currentRefNo,
+        startedTimestamp: startTimeStamp,
+        endedTimestamp: getCurrentDateTimeInFormat(),
+        symptoms: formData.symptoms.length > 0 ? formData.symptoms : undefined,
+        diagnosis: formData.diagnosisCategories.length > 0
+          ? formData.diagnosisCategories.map((category) => ({
+              category,
+              description: formData.detailed_diagnosis || "N/A",
+            }))
+          : undefined,
+        treatments: formData.medications.length > 0
+          ? formData.medications.map((med) => ({
+              medication: med.name,
+              description: med.frequency,
+              noteToPatient: med.note || undefined,
+            }))
+          : undefined,
+        noteToPatient: formData.special_note || undefined,
+        isLabReportRequired: false,
+        
+      };
+    
+      console.log("Medical Record Data:", medicalRecord);
+      const response = await axios.patch(
+        `${backendURL}/doctor/appointments/${currentRefNo}/medicalRecord`,
+        medicalRecord,
         config
-      );
+    );    
       return response.data;
     },
     onSuccess: () => {
@@ -84,6 +134,7 @@ const PatientRecord = ({
   });
 
   const handleSubmit = () => {
+    console.log("Submitting patient record...",formData);
     mutation.mutate();
   };
 
@@ -165,7 +216,7 @@ const PatientRecord = ({
           <h3 className="text-lg mb-3 font-semibold">Diagnosis</h3>
           <p className="text-sm text-[#868686]">Diagnosis Category</p>
           <p className="py-1 px-4 bg-[#DCDCDC] rounded-[8px] max-w-fit">
-            {formData.diagnosisCategories.join(", ")}
+            {/* {formData.diagnosisCategories.join(", ")} */}
           </p>
           <p className="text-sm text-[#868686] mt-6">Detailed Diagnosis</p>
           <p>{formData.detailed_diagnosis}</p>
