@@ -31,7 +31,7 @@ const PatientConsultationDataEntry = ({
             <div>
               <p className="text-[#868686] text-xs">Payment status</p>
               <p>
-                {appointmentData.paymentStatus === "Done" ? (
+                {appointmentData.paymentStatus === true ? (
                   <CheckCircleFilled className="mr-2 text-[#07950D]" />
                 ) : null}
                 {appointmentData.paymentStatus}

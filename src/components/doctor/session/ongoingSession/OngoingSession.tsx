@@ -16,21 +16,8 @@ const OngoingSession = () => {
   const [startTimeStamp, setStartTimeStamp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [patientData, setPatientData] = useState({
-    name: "Vishwa Sandaruwan",
-    age: 23,
-    sex: "Male",
-    nationality: "LK",
   });
   const [appointmentData, setAppointmentData] = useState({
-    refNumber: currentRefNo,
-    date: "2024/12/04",
-    timeSlot: "03.00 PM - 04.00 PM",
-    medicalCenter: "Nawaloka Hospital",
-    doctor: "Dr.V.V.Alwis",
-    appointCatergory: "OPD",
-    queueNo: "03",
-    startTime: "03.27 PM",
-    paymentStatus: "Done",
   });
   function getCurrentDateTimeInFormat(): string {
     const date = new Date();
@@ -116,6 +103,34 @@ const OngoingSession = () => {
     }
   };
 
+  const fetchAppointmentDetails = async (currentRefNo: string) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:9000/doctor/getAptDetailsForOngoingSessions/${currentRefNo}`,
+        config
+      );
+      const appointmentDetails = response.data;
+      console.log("Fetched Appointment Details:", appointmentDetails);
+      setAppointmentData({
+        refNumber: appointmentDetails.aptNumber,
+        date: "",
+        timeSlot: appointmentDetails.timeSlot,
+        medicalCenter: appointmentDetails.medicalCenterName,
+        doctor: appointmentDetails.doctorName,
+        appointCatergory: appointmentDetails.aptCategories,
+        queueNo: appointmentDetails.queueNo,
+        startTime: getCurrentDateTimeInFormat(),
+        paymentStatus: appointmentDetails.payment.isPaid,
+      });
+    } catch (error) {
+      console.error("Failed to fetch appointment details", error);
+    }
+    finally {
+      setIsLoading(false); // Stop loading after completion
+    }
+  }
+
   useEffect(() => {
     const fetchQueueData = async () => {
       try {
@@ -146,6 +161,7 @@ const OngoingSession = () => {
         if (currentAppointment) {
           setCurrentRefNo(currentAppointment.refNo);
           fetchPatientDetails(currentAppointment.refNo);
+          fetchAppointmentDetails(currentAppointment.refNo);
         }
       } catch (error) {
         console.error("Failed to fetch queue data", error);
@@ -156,6 +172,7 @@ const OngoingSession = () => {
     };
 
     fetchQueueData();
+
 
     // const interval = setInterval(fetchQueueData, 60000); // Poll every 60 seconds
     // return () => clearInterval(interval);
