@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { Divider } from "antd";
 import axios, { AxiosRequestConfig } from "axios";
+import { useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "../../../Loading";
 
 interface RecordProps {
   formData: any;
@@ -80,10 +82,11 @@ const PatientRecord = ({
       Authorization: `Bearer ${access_token}`,
     },
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async () => {
-      console.log("submit in muration",appointmentData);
+      
       const medicalRecord = {
         aptNumber: currentRefNo,
         startedTimestamp: startTimeStamp,
@@ -115,6 +118,10 @@ const PatientRecord = ({
     );    
       return response.data;
     },
+    onMutate: () => {
+      // Set loading to true before the mutation starts
+      setIsLoading(true);
+    },
     onSuccess: () => {
       Swal.fire({
         title: "Success!",
@@ -131,6 +138,10 @@ const PatientRecord = ({
         confirmButtonText: "OK",
       });
     },
+    onSettled: () => {
+      // Always set loading to false after the mutation settles (success or error)
+      setIsLoading(false);
+    },
   });
 
   const handleSubmit = () => {
@@ -141,6 +152,12 @@ const PatientRecord = ({
   return (
     <>
       <div className="bg-[#FFFFFF] rounded-[16px] py-4 px-8 mx-4">
+            {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Loading footer={false} />
+        </div>
+      )}
+
         <div>
           <h3 className="text-lg mb-3 font-semibold">Appointment Details</h3>
           <div className="grid grid-cols-5 gap-y-2 gap-x-4">

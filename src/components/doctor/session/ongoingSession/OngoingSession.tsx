@@ -7,12 +7,14 @@ import PatientRecord from "./PatientRecord";
 import ReviewRecordMessage from "./ReviewRecordMessage";
 import axios, { AxiosRequestConfig } from "axios";
 import TokenService from "../../../../services/TokenService";
+import Loading from "../../../Loading";
 
 const OngoingSession = () => {
   const [formData, setFormData] = useState(null);
   const [currentRefNo, setCurrentRefNo] = useState("");
   const [appointmentDetails, setAppointmentDetails] = useState([]);
   const [startTimeStamp, setStartTimeStamp] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [patientData, setPatientData] = useState({
     name: "Vishwa Sandaruwan",
     age: 23,
@@ -88,6 +90,7 @@ const OngoingSession = () => {
 
   const fetchPatientDetails = async (currentRefNo: string) => {
     try {
+      setIsLoading(true);
       const response = await axios.get(
         `http://localhost:9000/mca/getPatientDetailsForOngoingSessions/${currentRefNo}`,
         config
@@ -104,25 +107,19 @@ const OngoingSession = () => {
       });
       const startTime = getCurrentDateTimeInFormat();
       setStartTimeStamp(startTime);
-      // setAppointmentData({
-      //   refNumber: currentRefNo,
-      //   date: patientDetails.date,
-      //   timeSlot: patientDetails.timeSlot,
-      //   medicalCenter: patientDetails.medicalCenter,
-      //   doctor: patientDetails.doctor,
-      //   appointCatergory: patientDetails.category,
-      //   queueNo: patientDetails.queueNo,
-      //   startTime: patientDetails.startTime,
-      //   paymentStatus: patientDetails.paymentStatus,
-      // });
+    
     } catch (error) {
       console.error("Failed to fetch patient details", error);
+    }
+    finally {
+      setIsLoading(false); // Stop loading after
     }
   };
 
   useEffect(() => {
     const fetchQueueData = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(
           "http://localhost:9000/mca/getOngoingSessionQueue",
           config
@@ -153,12 +150,16 @@ const OngoingSession = () => {
       } catch (error) {
         console.error("Failed to fetch queue data", error);
       }
+     finally {
+      setIsLoading(false); // Stop loading after completion
+      }
     };
 
     fetchQueueData();
 
-    const interval = setInterval(fetchQueueData, 60000); // Poll every 60 seconds
-    return () => clearInterval(interval);
+    // const interval = setInterval(fetchQueueData, 60000); // Poll every 60 seconds
+    // return () => clearInterval(interval);
+    
   }, []);
 
   const handleFormSubmit = (data: any) => {
@@ -168,6 +169,12 @@ const OngoingSession = () => {
 
   return (
     <>
+      {isLoading && (
+        <div className="flex items-center justify-center h-screen w-screen bg-transparent">
+        <Loading footer={false} />
+      </div>
+      )}
+
       <div>
         <p className="text-xl font-bold ml-[1%] mt-[1%]">
           Ongoing Session Portal | At Nawaloka Hospital | Time Frame 03.00 PM -
