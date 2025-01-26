@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "../../../Loading";
+import { useNavigate } from "react-router-dom";
 
 interface RecordProps {
   formData: any;
@@ -75,7 +76,7 @@ const PatientRecord = ({
   startTimeStamp,
 }: RecordProps) => {
   const access_token = getToken();
-
+  const navigate = useNavigate();
   const config: AxiosRequestConfig = {
     headers: {
       "Content-Type": "application/json",
@@ -128,8 +129,12 @@ const PatientRecord = ({
         text: "Patient record submitted successfully.",
         icon: "success",
         confirmButtonText: "OK",
+      }).then(() => {
+        // Navigate after the user clicks "OK"
+        navigate("/doctor/sessions");
       });
     },
+    
     onError: (error: any) => {
       Swal.fire({
         title: "Error!",
