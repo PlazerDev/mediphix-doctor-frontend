@@ -151,7 +151,7 @@ function VacancyDetailedMarkSlots(props: any) {
           return {
             appliedOpenSessionId: parseInt(data.id),
             isAccepted: false,
-            expectedPaymentAmount: data.payment, // change hereeeeeee
+            expectedPaymentAmount: data.payment, // fixed the bug here
             numberOfPatientsPerTimeSlot,
           };
         });
@@ -166,6 +166,7 @@ function VacancyDetailedMarkSlots(props: any) {
         responseApplications,
         isCompletelyRejected: false,
       };
+      console.log("Payload:", payload);
 
       const backendURL = import.meta.env.VITE_BACKEND_URL;
       const access_token = TokenService.getToken();
@@ -189,6 +190,7 @@ function VacancyDetailedMarkSlots(props: any) {
   };
 
   function updatePayment(id: string, val: number) {
+    console.log(`Updating payment for id: ${id} to ${val}`);
     let i = 0;
     while (i < vacancySlotDataObj.length) {
       if (vacancySlotDataObj[i].id == id) {

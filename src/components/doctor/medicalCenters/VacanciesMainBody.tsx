@@ -44,6 +44,7 @@ function VacanciesMainBody() {
                 mobile: vacancy.mobile ,
                 vacancyNoteToDoctors : vacancy.vacancyNoteToDoctors ,
                 aptCategories : vacancy.aptCategories ,
+                vacancyObject : vacancy
            },
     });
   };
