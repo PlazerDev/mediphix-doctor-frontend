@@ -44,13 +44,25 @@ function VacanciesMainBody() {
                 mobile: vacancy.mobile ,
                 vacancyNoteToDoctors : vacancy.vacancyNoteToDoctors ,
                 aptCategories : vacancy.aptCategories ,
+                vacancyObject : vacancy
            },
     });
   };
 
   if (isLoading) {
-    return <Loading footer={false} />;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Loading footer={false} />
+      </div>
+    );
   }
+  
   if (isError) {
     return <h1>Error</h1>;
   }

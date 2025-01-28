@@ -1,15 +1,41 @@
 import { useMutation } from "@tanstack/react-query";
 import { Divider } from "antd";
 import axios, { AxiosRequestConfig } from "axios";
+import { useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "../../../Loading";
+import { useNavigate } from "react-router-dom";
 
 interface RecordProps {
   formData: any;
   patientData: any;
   appointmentData: any;
+  currentRefNo: string;
 }
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
+function getCurrentDateTimeInFormat(): string {
+  const date = new Date();
+
+  // Format the date components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const milliseconds = String(date.getMilliseconds()).padStart(2, '0');
+
+  // Get timezone offset in hours and minutes
+  const timezoneOffset = -date.getTimezoneOffset();
+  const offsetHours = String(Math.floor(timezoneOffset / 60)).padStart(2, '0');
+  const offsetMinutes = String(Math.abs(timezoneOffset % 60)).padStart(2, '0');
+  const timezoneSign = timezoneOffset >= 0 ? '+' : '-';
+
+  // Combine into the desired format
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${timezoneSign}${offsetHours}:${offsetMinutes}`;
+}
+
 
 interface TokenData {
   access_token: string;
@@ -46,24 +72,56 @@ const PatientRecord = ({
   formData,
   patientData,
   appointmentData,
+  currentRefNo,
+  startTimeStamp,
 }: RecordProps) => {
   const access_token = getToken();
-
+  const navigate = useNavigate();
   const config: AxiosRequestConfig = {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(
-        `${backendURL}/doctor/submitPatientRecord`,
-        { formData, patientData, appointmentData },
+      
+      const medicalRecord = {
+        aptNumber: currentRefNo,
+        startedTimestamp: startTimeStamp,
+        endedTimestamp: getCurrentDateTimeInFormat(),
+        symptoms: formData.symptoms.length > 0 ? formData.symptoms : undefined,
+        diagnosis: formData.diagnosisCategories.length > 0
+          ? formData.diagnosisCategories.map((category) => ({
+              category,
+              description: formData.detailed_diagnosis || "N/A",
+            }))
+          : undefined,
+        treatments: formData.medications.length > 0
+          ? formData.medications.map((med) => ({
+              medication: med.name,
+              description: med.frequency,
+              noteToPatient: med.note || undefined,
+            }))
+          : undefined,
+        noteToPatient: formData.special_note || undefined,
+        isLabReportRequired: false,
+        
+      };
+    
+      console.log("Medical Record Data:", medicalRecord);
+      const response = await axios.patch(
+        `${backendURL}/doctor/appointments/${currentRefNo}/medicalRecord`,
+        medicalRecord,
         config
-      );
+    );    
       return response.data;
+    },
+    onMutate: () => {
+      // Set loading to true before the mutation starts
+      setIsLoading(true);
     },
     onSuccess: () => {
       Swal.fire({
@@ -71,8 +129,12 @@ const PatientRecord = ({
         text: "Patient record submitted successfully.",
         icon: "success",
         confirmButtonText: "OK",
+      }).then(() => {
+        // Navigate after the user clicks "OK"
+        navigate("/doctor/sessions");
       });
     },
+    
     onError: (error: any) => {
       Swal.fire({
         title: "Error!",
@@ -81,15 +143,26 @@ const PatientRecord = ({
         confirmButtonText: "OK",
       });
     },
+    onSettled: () => {
+      // Always set loading to false after the mutation settles (success or error)
+      setIsLoading(false);
+    },
   });
 
   const handleSubmit = () => {
+    console.log("Submitting patient record...",formData);
     mutation.mutate();
   };
 
   return (
     <>
       <div className="bg-[#FFFFFF] rounded-[16px] py-4 px-8 mx-4">
+            {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Loading footer={false} />
+        </div>
+      )}
+
         <div>
           <h3 className="text-lg mb-3 font-semibold">Appointment Details</h3>
           <div className="grid grid-cols-5 gap-y-2 gap-x-4">
@@ -165,7 +238,7 @@ const PatientRecord = ({
           <h3 className="text-lg mb-3 font-semibold">Diagnosis</h3>
           <p className="text-sm text-[#868686]">Diagnosis Category</p>
           <p className="py-1 px-4 bg-[#DCDCDC] rounded-[8px] max-w-fit">
-            {formData.diagnosisCategories.join(", ")}
+            {/* {formData.diagnosisCategories.join(", ")} */}
           </p>
           <p className="text-sm text-[#868686] mt-6">Detailed Diagnosis</p>
           <p>{formData.detailed_diagnosis}</p>

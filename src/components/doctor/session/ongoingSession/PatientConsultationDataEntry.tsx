@@ -2,7 +2,7 @@ import { Divider } from "antd";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Link } from "react-router-dom";
 import PatentRecordEntryForm from "./PatentRecordEntryForm";
-import patientImage from "../../../../assets/images/session/patientImage.jpeg";
+import defaultUserImage from "./../../../../assets/images/user.jpg";
 import { CheckCircleFilled } from "@ant-design/icons";
 
 interface RecordProps {
@@ -11,8 +11,11 @@ interface RecordProps {
   appointmentData: any;
 }
 
-const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}: RecordProps) => {
-
+const PatientConsultationDataEntry = ({
+  onSubmit,
+  patientData,
+  appointmentData,
+}: RecordProps) => {
   return (
     <>
       <div className="flex flex-col bg-[#FFFFFF] rounded-[16px] w-4/5">
@@ -28,7 +31,7 @@ const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}:
             <div>
               <p className="text-[#868686] text-xs">Payment status</p>
               <p>
-                {appointmentData.paymentStatus === "Done" ? (
+                {appointmentData.paymentStatus === true ? (
                   <CheckCircleFilled className="mr-2 text-[#07950D]" />
                 ) : null}
                 {appointmentData.paymentStatus}
@@ -43,7 +46,7 @@ const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}:
             <div className="flex items-center ml-8 mr-16 w-44">
               <img
                 className="w-24 h-24 rounded-full object-contain"
-                src={patientImage}
+                src={defaultUserImage}
                 alt="Patient Profile Picture"
               />
             </div>
@@ -75,7 +78,10 @@ const PatientConsultationDataEntry = ({ onSubmit, patientData, appointmentData}:
           Patient Consultation Data Entry
         </div>
         <div className="p-4">
-          <PatentRecordEntryForm onSubmit={onSubmit} />
+          <PatentRecordEntryForm
+            onSubmit={onSubmit}
+            appoinmentNumber={appointmentData.refNumber}
+          />
         </div>
       </div>
     </>

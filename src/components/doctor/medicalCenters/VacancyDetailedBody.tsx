@@ -8,6 +8,7 @@ function VacancyDetailedBody(props: any) {
     aptCategories: props.aptCategories,
     contactNumber: props.mobile,
     note: props.vacancyNoteToDoctors,
+    otherData: props.vacancyObject,
   };
   return (
     <div>
@@ -28,8 +29,9 @@ function VacancyDetailedBody(props: any) {
           value={vacancyDataObj.note}
         />
       </div>
-      <VacancyDetailedMarkSlots 
-        openSessions = {props.openSessions}
+      <VacancyDetailedMarkSlots
+        openSessions={props.openSessions}
+        vacacncyId={props.vacacncyId}
       />
     </div>
   );

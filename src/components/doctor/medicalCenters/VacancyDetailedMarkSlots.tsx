@@ -27,6 +27,7 @@ function generateTimeSlots(startTime: string, endTime: string) {
 }
 
 function VacancyDetailedMarkSlots(props: any) {
+  const sessionVacancyId = props.vacacncyId;
   const openSessions = props.openSessions;
 
   const [formData, setFormData] = useState<
@@ -47,23 +48,33 @@ function VacancyDetailedMarkSlots(props: any) {
     id: item.sessionId.toString(),
     startDate: `${item.rangeStartTimestamp.year}-${String(
       item.rangeStartTimestamp.month
-    ).padStart(2, "0")}-${String(item.rangeStartTimestamp.day).padStart(2, "0")}`,
+    ).padStart(2, "0")}-${String(item.rangeStartTimestamp.day).padStart(
+      2,
+      "0"
+    )}`,
     endDate: item.rangeEndTimestamp.year
       ? `${item.rangeEndTimestamp.year}-${String(
           item.rangeEndTimestamp.month
-        ).padStart(2, "0")}-${String(item.rangeEndTimestamp.day).padStart(2, "0")}`
+        ).padStart(2, "0")}-${String(item.rangeEndTimestamp.day).padStart(
+          2,
+          "0"
+        )}`
       : "infinity",
     startTime: `${String(item.startTime.hour).padStart(2, "0")}:00`,
     endTime: `${String(item.endTime.hour).padStart(2, "0")}:00`,
-    isRepeat : item.repetition.isRepeat,
+    isRepeat: item.repetition.isRepeat,
     repetition: item.repetition.isRepeat ? item.repetition.days : [],
-    selectedDate: item.repetition.isRepeat? "" : `${item.repetition.noRepeatDateTimestamp.year}-${String(
-      item.repetition.noRepeatDateTimestamp.month
-    ).padStart(2, "0")}-${String(item.repetition.noRepeatDateTimestamp.day).padStart(2, "0")}`,
+    selectedDate: item.repetition.isRepeat
+      ? ""
+      : `${item.repetition.noRepeatDateTimestamp.year}-${String(
+          item.repetition.noRepeatDateTimestamp.month
+        ).padStart(2, "0")}-${String(
+          item.repetition.noRepeatDateTimestamp.day
+        ).padStart(2, "0")}`,
   }));
 
   const handleSwitchChange = (id: string, checked: boolean) => {
-    setSwitchStates((prevStates:any) => ({
+    setSwitchStates((prevStates: any) => ({
       ...prevStates,
       [id]: checked,
     }));
@@ -91,20 +102,25 @@ function VacancyDetailedMarkSlots(props: any) {
     });
   };
   const [validationErrors, setValidationErrors] = useState<
-  Record<string, string[]>
+    Record<string, string[]>
   >({});
 
   const handleSubmit = async () => {
-    
     const errors: Record<string, string[]> = {};
     let isValid = true;
 
-    vacancySlotDataObj.forEach((data:any) => {
+    vacancySlotDataObj.forEach((data: any) => {
       if (switchStates[data.id]) {
         const slotData = formData.find((entry) => entry.id === data.id);
         const timeSlots = generateTimeSlots(data.startTime, data.endTime);
         const missingSlots = timeSlots.filter(
-          (slot) => !slotData?.data.some((entry) => entry.time === slot && entry.noOfPatients > 0 && entry.noOfPatients <= 20)
+          (slot) =>
+            !slotData?.data.some(
+              (entry) =>
+                entry.time === slot &&
+                entry.noOfPatients > 0 &&
+                entry.noOfPatients <= 20
+            )
         );
 
         if (missingSlots.length > 0) {
@@ -121,11 +137,10 @@ function VacancyDetailedMarkSlots(props: any) {
       return;
     }
 
-  
     try {
       const responseApplications = vacancySlotDataObj
-        .filter((data:any) => switchStates[data.id]) 
-        .map((data:any) => {
+        .filter((data: any) => switchStates[data.id])
+        .map((data: any) => {
           const slotData = formData.find((entry) => entry.id === data.id);
           const numberOfPatientsPerTimeSlot = slotData
             ? slotData.data.map((slot, index) => ({
@@ -134,9 +149,9 @@ function VacancyDetailedMarkSlots(props: any) {
               }))
             : [];
           return {
-            appliedVacancySessionId: parseInt(data.id),
+            appliedOpenSessionId: parseInt(data.id),
             isAccepted: false,
-            expectedPaymentAmount: 2500.0,
+            expectedPaymentAmount: data.payment, // fixed the bug here
             numberOfPatientsPerTimeSlot,
           };
         });
@@ -144,12 +159,14 @@ function VacancyDetailedMarkSlots(props: any) {
       const payload = {
         responseId: 0,
         submittedTimestamp: new Date().toISOString(),
-        doctorId: "", 
+        doctorId: "",
+        sessionVacancyId,
         noteToPatient,
         vacancyNoteToCenter,
         responseApplications,
         isCompletelyRejected: false,
       };
+      console.log("Payload:", payload);
 
       const backendURL = import.meta.env.VITE_BACKEND_URL;
       const access_token = TokenService.getToken();
@@ -172,6 +189,18 @@ function VacancyDetailedMarkSlots(props: any) {
     }
   };
 
+  function updatePayment(id: string, val: number) {
+    console.log(`Updating payment for id: ${id} to ${val}`);
+    let i = 0;
+    while (i < vacancySlotDataObj.length) {
+      if (vacancySlotDataObj[i].id == id) {
+        break;
+      }
+      i++;
+    }
+    vacancySlotDataObj[i].payment = val;
+  }
+
   return (
     <ConfigProvider
       theme={{
@@ -186,7 +215,7 @@ function VacancyDetailedMarkSlots(props: any) {
         <p className="font-bold">
           Mark your preferred vacancy slots & enter required details
         </p>
-        {vacancySlotDataObj.map((data:any) => {
+        {vacancySlotDataObj.map((data: any) => {
           const timeSlots = generateTimeSlots(data.startTime, data.endTime);
           const isEnabled = switchStates[data.id];
 
@@ -255,6 +284,17 @@ function VacancyDetailedMarkSlots(props: any) {
                         />
                       </div>
                     ))}
+                  </div>
+                  <div>
+                    <p className="font-bold mt-2">Expected payment</p>
+                    <Input
+                      type="number"
+                      placeholder="Enter here"
+                      className="w-40"
+                      onChange={(e) =>
+                        updatePayment(data.id, parseInt(e.target.value) || 0)
+                      }
+                    />
                   </div>
                 </>
               )}
