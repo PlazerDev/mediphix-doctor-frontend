@@ -79,7 +79,7 @@ export class DoctorService {
     try {
       await axios.post(url, payload, {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
         },
       });
       setIsLoading(false);

@@ -172,7 +172,7 @@ function VacancyDetailedMarkSlots(props: any) {
       const access_token = TokenService.getToken();
       const config: AxiosRequestConfig = {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           Authorization: `Bearer ${access_token}`,
         },
       };

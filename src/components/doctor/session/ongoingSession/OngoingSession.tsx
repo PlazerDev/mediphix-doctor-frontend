@@ -50,7 +50,7 @@ const OngoingSession = () => {
   const access_token: string = TokenService.getToken();
   const config: AxiosRequestConfig = {
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
   };

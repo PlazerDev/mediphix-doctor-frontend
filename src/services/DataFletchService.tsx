@@ -11,7 +11,7 @@ export const useDataFetchService = (key: string ,endpoint : string) => {
 
   const config: AxiosRequestConfig = {
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
   };
