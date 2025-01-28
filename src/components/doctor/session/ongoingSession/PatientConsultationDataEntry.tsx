@@ -46,7 +46,11 @@ const PatientConsultationDataEntry = ({
             <div className="flex items-center ml-8 mr-16 w-44">
               <img
                 className="w-24 h-24 rounded-full object-contain"
-                src={defaultUserImage}
+                src={
+                  patientData.profileImage
+                    ? patientData.profileImage
+                    : defaultUserImage
+                }
                 alt="Patient Profile Picture"
               />
             </div>

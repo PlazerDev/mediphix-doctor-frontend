@@ -89,6 +89,7 @@ const OngoingSession = () => {
         age: patientDetails.birthday,
         sex: patientDetails.gender,
         nationality: patientDetails.nationality,
+        profileImage: patientDetails.profileImage,
       });
       const startTime = getCurrentDateTimeInFormat();
       setStartTimeStamp(startTime);
