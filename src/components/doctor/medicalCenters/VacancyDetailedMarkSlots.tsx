@@ -196,6 +196,7 @@ function VacancyDetailedMarkSlots(props: any) {
       if (vacancySlotDataObj[i].id == id) {
         break;
       }
+      i++;
     }
     vacancySlotDataObj[i].payment = val;
   }
