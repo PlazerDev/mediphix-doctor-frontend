@@ -106,7 +106,7 @@ const DoctorHome = () => {
 
   const config: AxiosRequestConfig = {
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': `Bearer ${access_token}`
     }
   };
