@@ -15,10 +15,8 @@ const OngoingSession = () => {
   const [appointmentDetails, setAppointmentDetails] = useState([]);
   const [startTimeStamp, setStartTimeStamp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [patientData, setPatientData] = useState({
-  });
-  const [appointmentData, setAppointmentData] = useState({
-  });
+  const [patientData, setPatientData] = useState({});
+  const [appointmentData, setAppointmentData] = useState({});
   function getCurrentDateTimeInFormat(): string {
     const date = new Date();
 
@@ -91,14 +89,13 @@ const OngoingSession = () => {
         age: patientDetails.birthday,
         sex: patientDetails.gender,
         nationality: patientDetails.nationality,
+        profileImage: patientDetails.profileImage,
       });
       const startTime = getCurrentDateTimeInFormat();
       setStartTimeStamp(startTime);
-    
     } catch (error) {
       console.error("Failed to fetch patient details", error);
-    }
-    finally {
+    } finally {
       setIsLoading(false); // Stop loading after
     }
   };
@@ -125,11 +122,10 @@ const OngoingSession = () => {
       });
     } catch (error) {
       console.error("Failed to fetch appointment details", error);
-    }
-    finally {
+    } finally {
       setIsLoading(false); // Stop loading after completion
     }
-  }
+  };
 
   useEffect(() => {
     const fetchQueueData = async () => {
@@ -165,18 +161,15 @@ const OngoingSession = () => {
         }
       } catch (error) {
         console.error("Failed to fetch queue data", error);
-      }
-     finally {
-      setIsLoading(false); // Stop loading after completion
+      } finally {
+        setIsLoading(false); // Stop loading after completion
       }
     };
 
     fetchQueueData();
 
-
     // const interval = setInterval(fetchQueueData, 60000); // Poll every 60 seconds
     // return () => clearInterval(interval);
-    
   }, []);
 
   const handleFormSubmit = (data: any) => {
@@ -188,14 +181,13 @@ const OngoingSession = () => {
     <>
       {isLoading && (
         <div className="flex items-center justify-center h-screen w-screen bg-transparent">
-        <Loading footer={false} />
-      </div>
+          <Loading footer={false} />
+        </div>
       )}
 
       <div>
         <p className="text-xl font-bold ml-[1%] mt-[1%]">
-          Ongoing Session Portal | At Nawaloka Hospital | Time Frame 03.00 PM -
-          05.00 PM
+          Ongoing Session Portal
         </p>
       </div>
       <div>

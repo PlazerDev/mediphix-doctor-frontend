@@ -47,7 +47,7 @@ function DoctorRoutes() {
           path="/medicalcenters"
           element={
             <MedicalCenterSection
-              name={" Dr. V.ALWIS "}
+              name={" "}
               title={"Manage medical centers here"}
               buttontitles={["My Medical Centers", "All Medical Centers"]}
               buttonimages={[TbHeartHandshake, TbHeart]}
@@ -94,7 +94,7 @@ function DoctorRoutes() {
           path="/sessions"
           element={
             <AppointmentSection
-              name={" Dr. V.ALWIS "}
+              name={""}
               title={"Manage your sessions here"}
               buttontitles={[
                 "Upcoming Clinic Sessions",

@@ -108,7 +108,7 @@ function VacancyDetailedMarkSlots(props: any) {
   const handleSubmit = async () => {
     const errors: Record<string, string[]> = {};
     let isValid = true;
-
+    console.log("DEBUG 01:", vacancySlotDataObj);
     vacancySlotDataObj.forEach((data: any) => {
       if (switchStates[data.id]) {
         const slotData = formData.find((entry) => entry.id === data.id);
@@ -148,6 +148,8 @@ function VacancyDetailedMarkSlots(props: any) {
                 maxNumOfPatients: slot.noOfPatients,
               }))
             : [];
+
+          console.log("DEBUG PAYMENT:", vacancySlotDataObj);
           return {
             appliedOpenSessionId: parseInt(data.id),
             isAccepted: false,
@@ -190,6 +192,7 @@ function VacancyDetailedMarkSlots(props: any) {
   };
 
   function updatePayment(id: string, val: number) {
+    console.log("vacancy slot data obj ", vacancySlotDataObj);
     console.log(`Updating payment for id: ${id} to ${val}`);
     let i = 0;
     while (i < vacancySlotDataObj.length) {
@@ -198,7 +201,7 @@ function VacancyDetailedMarkSlots(props: any) {
       }
       i++;
     }
-    vacancySlotDataObj[i].payment = val;
+    vacancySlotDataObj[i].payment = val * 1.0;
   }
 
   return (
