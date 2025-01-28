@@ -12,6 +12,8 @@ import {
 import { Button } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useAuthContext } from "@asgardeo/auth-react";
+import Swal from "sweetalert2";
 
 interface NavigationProps {
   role: string;
@@ -23,6 +25,28 @@ const PatientNavigation = (props: NavigationProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentSegment, setCurrentSegment] = useState<string | undefined>();
+
+  const { signOut } = useAuthContext();
+
+  function signOutButtonHandler() {
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#ff7300",
+      confirmButtonText: "Yes, Log Out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        signOut();
+        Swal.fire({
+          text: "You have been successfully logged out",
+          icon: "success",
+          confirmButtonColor: "#ff7300",
+        });
+      }
+    });
+  }
 
   // Map current location to segment
 
@@ -147,6 +171,7 @@ const PatientNavigation = (props: NavigationProps) => {
             />
 
             <Button
+              onClick={signOutButtonHandler}
               className="custom-button"
               type="default"
               size="large"
