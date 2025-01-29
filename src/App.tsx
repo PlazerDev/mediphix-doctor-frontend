@@ -20,6 +20,7 @@ function App() {
       "update_own_doctor_sessions",
       "retrive_appoinments",
       "submit_patient_records",
+      "basic_doctor"
     ],
   };
   return (
